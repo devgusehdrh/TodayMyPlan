@@ -109,7 +109,8 @@
                 let username = $("#input-username-modal").val()
                 let password = $("#input-password-modal").val()
                 let password2 = $("#input-password2-modal").val()
-                console.log(username, password, password2)
+                let nickname = $("#input-nickname-modal").val()
+                {#console.log(username, password, password2)#}
 
 
                 if ($("#help-id").hasClass("is-danger")) {
@@ -147,7 +148,8 @@
                     url: "/sign_up/save",
                     data: {
                         username_give: username,
-                        password_give: password
+                        password_give: password,
+                        nickname_give: nickname
                     },
                     success: function (response) {
                         alert("회원가입을 축하드립니다!")
@@ -156,6 +158,7 @@
                 });
 
             }
+
 
             function is_nickname(asValue) {
                 var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
@@ -199,6 +202,13 @@
 
                     }
                 });
+            }
+
+            function modal_reset() {
+                        $('#form_box1')[0].reset();
+                        $('#form_box2')[0].reset();
+                        $('#form_box3')[0].reset();
+                        $('#form_box4')[0].reset();
             }
         </script>
 
@@ -262,27 +272,40 @@
                             <div class="box">
                                 <article class="media">
                                     <div class="media-content">
-                                        <form>
                                         <div class="content">
+                                            <form id="form_box1">
+                                                <div class="field has-addons">
 
-                                            <div class="field has-addons">
-                                                <div class="control has-icons-left" style="width:100%">
-                                                    <input id="input-username-modal" class="input" type="text" placeholder="아이디">
-                                                    <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
-                                                </div>
-                                                <div id="btn-check-dup" class="control ">
-                                                    <button class="button is-sparta" onclick="check_dup()">중복확인</button>
-                                                </div>
+                                                    <div class="control has-icons-left" style="width:100%">
+                                                        <input id="input-username-modal" class="input" type="text" placeholder="아이디">
+                                                        <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                                                    </div>
+                                                    <div id="btn-check-dup" class="control ">
+                                                        <button class="button is-sparta" onclick="check_dup()">중복확인</button>
+                                                    </div>
 
-                                            </div>
+
+                                                </div>
+                                            </form>
                                             <p id="help-id" class="help n">아이디는 2-10자의 영문과 숫자와 일부 특수문자(._-)만 입력 가능합니다.</p>
                                             <p id="help-id-login" class="help is-danger"></p>
 
+                                             <div class="field">
+                                                 <form id="form_box2">
+                                                    <div class="control has-icons-left">
+                                                        <input id="input-nickname-modal" class="input" type="text" placeholder="닉네임">
+                                                        <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                                                    </div>
+                                                 </form>
+                                            </div>
+
                                             <div class="field">
-                                                <div class="control has-icons-left">
-                                                    <input id="input-password-modal" class="input" type="password" placeholder="비밀번호">
-                                                    <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
-                                                </div>
+                                                <form id="form_box3">
+                                                    <div class="control has-icons-left">
+                                                        <input id="input-password-modal" class="input" type="password" placeholder="비밀번호">
+                                                        <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                                                    </div>
+                                                </form>
                                                 <p id="help-password" class="help ">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도 사용 가능합니다.</p>
                                             </div>
 
@@ -292,11 +315,13 @@
                                         <div id="sign-up-box" class="">
                                             <div class="mb-5">
                                                 <div class="field">
+                                                    <form id="form_box4">
                                                     <div class="control has-icons-left" style="width:100%">
                                                         <input id="input-password2-modal" class="input" type="password"
                                                                placeholder="비밀번호 재입력">
                                                         <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
                                                     </div>
+                                                    </form>
                                                     <p id="help-password2" class="help ">비밀번호를 다시 한 번 입력해주세요.</p>
 
                                                 </div>
@@ -309,10 +334,9 @@
 {#                                                    취소#}
 {#                                                </button>#}
 
-                                                <input class="level-item button is-sparta is-outlined" type="reset" value="다시쓰기">
+                                                <input class="level-item button is-sparta is-outlined" value="다시쓰기" onclick="modal_reset()">
                                             </nav>
                                         </div>
-                                        </form>
                                     </div>
                                 </article>
                             </div>
