@@ -204,7 +204,7 @@
                 });
             }
 
-            # 회원가입 modal 내부 input 내용 다시쓰기 누를 경우 초기화
+             {#회원가입 modal 내부 input 내용 다시쓰기 누를 경우 초기화#}
             function modal_reset() {
                         $('#form_box1')[0].reset();
                         $('#form_box2')[0].reset();
@@ -218,12 +218,13 @@
     <body>
         <section class="hero is-white">
             <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
-                # 타이틀 클릭시 로그인 페이지 리다이렉션
-                <h1 class="title is-sparta" onclick='window.location.replace("/login")'">오늘 뭐하지?</h1>
+{#                타이틀 클릭시 로그인 페이지 리다이렉션#}
+{#                <h1 class="title is-sparta">오늘 뭐하지?</h1>#}
+                <h1 class="title is-sparta" onclick='window.location.replace("/login")'>오늘 뭐하지?</h1>
             </div>
         </section>
 
-        # 로그인 아이디 / 비밀번호 입력창
+{#         로그인 아이디 / 비밀번호 입력창#}
         <section class="section">
             <div class="container">
                 <div class="box" style="max-width: 480px;margin:auto">
@@ -231,7 +232,7 @@
                         <div class="media-content">
                             <div class="content">
                                 <div class="field has-addons">
-                                    # 아이디 입력칸
+{#                                     아이디 입력칸#}
                                     <div class="control has-icons-left" style="width:100%">
                                         <input id="input-username" class="input" type="text" placeholder="아이디">
                                         <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
@@ -239,7 +240,7 @@
                                 </div>
 
                                 <div class="field">
-                                    # 비밀번호 입력칸
+{#                                     비밀번호 입력칸#}
                                     <div class="control has-icons-left">
                                         <input id="input-password" class="input" type="password" placeholder="비밀번호">
                                         <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
@@ -249,7 +250,7 @@
 
                             </div>
                             <div id="div-sign-in-or-up" class="has-text-centered">
-                                # 로그인 버튼
+{#                                 로그인 버튼#}
                                 <nav class="level is-mobile">
                                     <button class="level-item button is-sparta" onclick="sign_in()">
                                         로그인
@@ -258,7 +259,7 @@
                                 </nav>
                                 <hr>
                                 <h4 class="mb-3">아직 회원이 아니라면</h4>
-                                # 회원가입하기 버튼
+{#                                 회원가입하기 버튼#}
                                 <nav class="level is-mobile">
                                     <button class="level-item button is-sparta is-outlined"
                                             onclick='$("#modal-signup").addClass("is-active")'>
@@ -268,7 +269,7 @@
                             </div>
                         </div>
                     </article>
-                    # 회원가입하기 클릭시 모달 기능으로 출력
+{#                     회원가입하기 클릭시 모달 기능으로 출력#}
                     <div class="modal" id="modal-signup">
                         <div class="modal-background" onclick='$("#modal-signup").removeClass("is-active")'></div>
                         <div class="modal-content">
@@ -283,7 +284,7 @@
                                                             <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
                                                         </form>
                                                     </div>
-                                                    # 회원가입시 아이디 중복확인 버튼
+{#                                                     회원가입시 아이디 중복확인 버튼#}
                                                     <div id="btn-check-dup" class="control ">
                                                         <button class="button is-sparta" onclick="check_dup()">중복확인</button>
                                                     </div>
@@ -329,7 +330,7 @@
                                                 <button class="level-item button is-sparta" onclick="sign_up()">
                                                     회원가입
                                                 </button>
-                                                # 회원가입 간 입력 가능 칸 초기화 버튼(다시쓰기 버튼)
+{#                                                 회원가입 간 입력 가능 칸 초기화 버튼(다시쓰기 버튼)#}
                                                 <input class="level-item button is-sparta is-outlined" value="다시쓰기" onclick="modal_reset()">
                                             </nav>
                                         </div>
