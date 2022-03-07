@@ -16,6 +16,13 @@ body {
     color: #2ca0dc !important;
 }
 
+.title.sub {
+    font-family: 'Stylish', sans-serif;
+    font-weight: 800;
+    font-size: 4rem;
+    color: #000000 !important;
+}
+
 .button.login {
     background-color: #2ca0dc;
     border-color: transparent;
@@ -26,4 +33,22 @@ body {
     background-color: transparent;
     border-color: #2ca0dc;
     color: #2ca0dc !important;
+}
+
+.button.register {
+    background-color: #2ca0dc;
+    border-color: transparent;
+    color: #fff !important;
+}
+
+.button.cancel {
+    background-color: transparent;
+    border-color: #2ca0dc;
+    color: #2ca0dc !important;
+}
+
+.button.duplicate {
+    background-color: #2ca0dc;
+    border-color: transparent;
+    color: #fff !important;
 }
