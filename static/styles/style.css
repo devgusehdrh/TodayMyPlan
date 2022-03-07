@@ -1,0 +1,29 @@
+body {
+    background-color: #C6E0F1FF;
+    min-height: 100vh;
+}
+
+.section {
+    padding: 1rem 1.5rem;
+    max-width: 750px;
+    margin: auto;
+}
+
+.title {
+    font-family: 'Stylish', sans-serif;
+    font-weight: 800;
+    font-size: 7rem;
+    color: #2ca0dc !important;
+}
+
+.button.login {
+    background-color: #2ca0dc;
+    border-color: transparent;
+    color: #fff !important;
+}
+
+.button.signup {
+    background-color: transparent;
+    border-color: #2ca0dc;
+    color: #2ca0dc !important;
+}
