@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>로그인 페이지</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bulma CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+        <!-- 구글폰트 -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
+
+        <!-- 스타일시트 -->
+        <link rel="stylesheet" href="/static/styles/style.css"/>
+
+        <script>
+            {% if msg %}
+                alert("{{ msg }}")
+            {% endif %}
+
+            function sign_in() {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/login",
+                    data: {id_give: $('#userid').val(), pw_give: $('#userpw').val()},
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
+                            // 이 토큰을 mytoken이라는 키 값으로 쿠키에 저장합니다.
+                            $.cookie('mytoken', response['token']);
+
+                            alert('로그인 완료!')
+                            window.location.href = '/'
+                        } else {
+                            // 로그인이 안되면 에러메시지를 띄웁니다.
+                            alert(response['msg'])
+                        }
+                    }
+                })
+            }
+
+        </script>
+    </head>
+    <body>
+        <section class="hero is-white">
+            <div class="hero-body has-text-centered" style="padding:7rem;">
+                <h1 class="title">오늘 뭐하지?</h1>
+            </div>
+        </section>
+        <section class="section">
+            <div class="container">
+                <div class="box" style="max-width: 525px;margin:50px auto auto auto;padding:50px;">
+                    <article class="media">
+                        <div class="media-content">
+                            <div class="content">
+                                <div class="field">
+                                    <div class="control">
+                                        <input id="userid" class="input" type="text" placeholder="아이디를 입력해주세요">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        <input id="userpw" class="input" type="password" placeholder="비밀번호를 입력해주세요">
+                                    </div>
+                                </div>
+                                <div id="div-sign-in-or-up" class="has-text-centered" style="margin-top:25px;">
+                                    <nav class="level is-mobile">
+                                        <button class="level-item button login" onclick="sign_in()"> 로그인</button>
+                                        <button class="level-item button signup" onclick=""> 회원가입
+                                        </button>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
