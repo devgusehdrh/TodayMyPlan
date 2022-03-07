@@ -160,16 +160,17 @@
             }
 
 
-            function is_nickname(asValue) {
+            function is_id(asValue) {
                 var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
                 return regExp.test(asValue);
             }
+
 
             function is_password(asValue) {
                 var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
                 return regExp.test(asValue);
             }
-
+            {##아이디 중복 확인#}
             function check_dup() {
                 let username = $("#input-username-modal").val()
                 console.log(username)
@@ -178,11 +179,12 @@
                     $("#input-username-modal").focus()
                     return;
                 }
-                if (!is_nickname(username)) {
+                if (!is_id(username)) {
                     $("#help-id").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이").removeClass("is-safe").addClass("is-danger")
                     $("#input-username-modal").focus()
                     return;
                 }
+
                 $("#help-id").addClass("is-loading")
                 $.ajax({
                     type: "POST",
@@ -203,6 +205,8 @@
                     }
                 });
             }
+
+
 
              {#회원가입 modal 내부 input 내용 다시쓰기 누를 경우 초기화#}
             function modal_reset() {
@@ -299,6 +303,7 @@
                                                         <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
                                                     </div>
                                                  </form>
+
                                             </div>
 
                                             <div class="field">
