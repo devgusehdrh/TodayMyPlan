@@ -53,7 +53,7 @@ def sign_in():
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
         return jsonify({'result': 'success', 'token': token})
-    # 찾지 못하면
+    # 해당 정보가 없을 경우
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
@@ -76,8 +76,6 @@ def check_dup():
     username_receive = request.form['username_give']
     exists = bool(db.users.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
-
-
 
 
 if __name__ == '__main__':
