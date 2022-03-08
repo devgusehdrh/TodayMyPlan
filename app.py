@@ -194,6 +194,13 @@ def detail(plan_no):
 def detail_none():
     return home()
 
+@app.route('/detail/comment-list')
+def detail_comment():
+    comments = list(db.comments.find({},{'_id':False}))
+
+    return render_template('detail.html', comments=comments)
+
+
 @app.route('/detail/comment-registration', methods=['POST'])
 def save_comment():
     # 토큰 가져오기
@@ -212,6 +219,7 @@ def save_comment():
     db.comments.insert_one(doc)
 
     return jsonify({'result': 'success', 'msg': '댓글이 등록되었습니다!'})
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
