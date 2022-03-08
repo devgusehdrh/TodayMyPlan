@@ -45,6 +45,10 @@
             border-radius: 70px;
             font-size: 12px;
         }
+        button.is-warning.edit {
+            border-radius: 70px;
+            font-size: 12px;
+        }
         .modal-content {
             width: 600px;
             max-width: 80%;
@@ -106,7 +110,7 @@
                         </div>
                     </section>
                 </div>
-                <div class="col-6" style="margin:auto;">
+                <div class="col-5" style="margin:auto;">
                     <div class="field has-addons">
                         <div class="control" style="width:100%">
                             <form id="form_box1">
@@ -118,6 +122,9 @@
                 </div>
                 <div class="col-2" style="margin:auto">
                     {{ user_info['nickname'] }}님, 오늘도 화이팅!
+                </div>
+                <div class="col-1" style="margin:auto">
+                    <button class="button is-warning edit" onclick="location.href='/userinfo-modify'">회원정보수정</button>
                 </div>
                 <div class="col-1" style="margin:auto">
                     <button class="button is-light logout" onclick="logout()">로그아웃</button>
