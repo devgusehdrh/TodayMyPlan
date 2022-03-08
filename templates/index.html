@@ -95,10 +95,6 @@
                 }
             })
         }
-
-        function cardClick() {
-            alert('카드누르면 해당 상세페이지로 이동할 예정, 추후 변경할게요~')
-        }
     </script>
     <body>
         <div class="container">
@@ -141,13 +137,13 @@
         <div class="mycards">
             <div class="row row-cols-1 row-cols-md-4 g-4">
                 {% for plan in today_plans %}
-                <div class="col" onclick="cardClick()">
+                <div class="col" onclick="location.href='/detail/{{ plan.plan_no }}'">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title plan">{{ plan.nickname }}님의 오늘 계획</h5>
                             <p class="card-text">{{ plan.my_plan }}</p>
-                            <p style="display:none">{{ plan.plan_no }}</p>
-                            <p style="display:none">{{ plan.today }}</p>
+                            <p id="plan_no" style="display:none">{{ plan.plan_no }}</p>
+                            <p id="plan_day" style="display:none">{{ plan.today }}</p>
                         </div>
                     </div>
                 </div>
