@@ -22,7 +22,8 @@ def home():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"username": payload["id"]})
-        return render_template('index.html', user_info=user_info)
+        today_plans = db.plans.find({'today': datetime.now().strftime('%Y-%m-%d')})
+        return render_template('index.html', user_info=user_info, today_plans=today_plans)
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
@@ -48,7 +49,7 @@ def sign_in():
     if result is not None:
         payload = {
          'id': username_receive,
-         'exp': datetime.utcnow() + timedelta(seconds=60 * 5)  # 로그인 5분 유지
+         'exp': datetime.utcnow() + timedelta(minutes=60)  # 로그인 5분 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -83,6 +84,53 @@ def check_dup_nick():
     nickname_receive = request.form['nickname_give']
     exists = bool(db.users.find_one({"nickname": nickname_receive}))
     return jsonify({'result': 'success', 'exists': exists})
+
+# 오늘 나의 계획을 등록하는 API입니다. (메인 페이지의 ajax가 콜합니다.)
+@app.route('/POST/plan', methods=['POST'])
+def post_plan():
+    # 토큰 가져오기
+    token_receive = request.cookies.get('mytoken')
+    # 토큰이 유효한 경우에만 아래 처리 실행
+    try:
+        # 토큰을 복호화
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 유저DB에서 토큰["id"]를 키로 유저검색
+        user_info = db.users.find_one({"username": payload["id"]})
+
+        my_plan_receive = request.form['myPlan_give'] # 계획
+        registration_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 등록시간 (초단위까지)
+        today = datetime.now().strftime('%Y-%m-%d')  # 등록시간 (년월일)
+
+        # [플랜 고유번호 부여]
+        # plans DB에서 오늘 날짜로 등록된 전체 데이터 조회
+        today_all_plans = list(db.plans.find({'today': today}, {'_id': False}))
+
+        # 오늘 등록된 플랜이 하나도 없는 경우
+        if len(today_all_plans) == 0:
+            # 플랜 번호 1을 부여
+            plan_no = 1
+        # 등록된 플랜이 한 개라도 있는 경우
+        else:
+            # 람다함수를 이용, 플랜 번호를 key로 오름차순 정률 후 [-1]로 마지막 요소 추출
+            last_plan = sorted(today_all_plans, key=lambda k: k['plan_no'])[-1]
+            # 최근 등록된 플랜 번호에 1을 더해 플랜 번호 부여
+            plan_no = last_plan['plan_no'] + 1
+
+        doc = {
+            'plan_no': plan_no,  # 고유번호
+            'username': user_info['username'],  # 유저 아이디
+            'nickname': user_info['nickname'],  # 유저 닉네임
+            'my_plan': my_plan_receive,  # 계획
+            'registration_time': registration_time,  # 등록시간 (초단위까지)
+            'today': today  # 오늘 날짜
+        }
+        # myPlan DB에 유저의 계획 등록
+        db.plans.insert_one(doc)
+        # json형태로 response 반환
+        return jsonify({'result': 'success', 'msg': '오늘의 계획이 등록되었습니다!'})
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("/"))
 
 
 if __name__ == '__main__':
