@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 # 정규식 표현식 불러오기
 import re
 
-
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
@@ -92,9 +91,9 @@ def sign_up():
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     # 데이터베이스에 저장
     doc = {
-        "username": username_receive,                               # 아이디
-        "password": password_hash,                                  # 비밀번호
-        "nickname": nickname_receive,                               # 닉네임
+        "username": username_receive,  # 아이디
+        "password": password_hash,  # 비밀번호
+        "nickname": nickname_receive,  # 닉네임
     }
     db.users.insert_one(doc)
     # 회원가입 성공 반환
@@ -130,13 +129,17 @@ def post_plan():
         # 유저DB에서 토큰["id"]를 키로 유저검색
         user_info = db.users.find_one({"username": payload["id"]})
 
-        my_plan_receive = request.form['myPlan_give'] # 계획
+        my_plan_receive = request.form['myPlan_give']  # 계획
         registration_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 등록시간 (초단위까지)
         today = datetime.now().strftime('%Y-%m-%d')  # 등록시간 (년월일)
 
         # [플랜 고유번호 부여]
         # plans DB에서 오늘 날짜로 등록된 전체 데이터 조회
         today_all_plans = list(db.plans.find({'today': today}, {'_id': False}))
+
+        # 현재 로그인한 유저가 오늘 등록한 계획이 이미 있다면 알림을 띄우고 포스팅을 등록을 취소합니다.
+        if len(list(db.plans.find({'today': today, 'username': user_info['username']}, {'_id': False}))) > 0:
+            return jsonify({'result': 'fail', 'msg': '이미 계획이 등록 되었습니다.'})
 
         # 오늘 등록된 플랜이 하나도 없는 경우
         if len(today_all_plans) == 0:
