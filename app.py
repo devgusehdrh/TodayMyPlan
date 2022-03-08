@@ -176,14 +176,20 @@ def detail(plan_no):
     # 토큰 가져오기
     token_receive = request.cookies.get('mytoken')
     # plan_no에서 숫자만 남기고 다른 문자를 지운다
-    plan_no = re.sub('[^0-9]', ' ', plan_no).strip()
+    plan_no = int(re.sub('[^0-9]', ' ', plan_no).strip())
+    today = datetime.now().strftime('%Y-%m-%d')  # 등록시간 (년월일)
     try:
         # 토큰 복호화
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": payload["id"]})
-        # 사용자가 계획 클릭시 해당 계획 번호를 이용하여 포스트 정보 획득
-        user_post = db.plans.find_one({"plan_no": int(plan_no)})
+        # 오늘 날짜의 포스트를 모두 찾는다.
+        today_all_plans = list(db.plans.find({'today': today}, {'_id': False}))
+        # 오늘 날짜 중에 인덱스 값이 동일한 값을 user_post에 넣는다.
+        for today_plan in today_all_plans:
+            if today_plan['plan_no'] == plan_no:
+                user_post = today_plan
+
         # 세부 페이지를 돌려주며 사용자 정보, 포스팅 정보, 포스팅 번호를 함께 넘겨준다.
         return render_template('detail.html', user_info=user_info, user_post=user_post, plan_no=plan_no)
 
