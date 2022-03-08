@@ -78,23 +78,31 @@
         </style>
         <script>
             let plan_no = '{{ plan_no }}'
-
             $(document).ready(function(){
                 show_plan();
             });
+
+
             function sign_out() {
                 $.removeCookie('mytoken', {path: '/'});
                 alert('로그아웃 되셨습니다')
-                window.location.href = "/login"
+                window.location.href = "/"
             }
 
             {## 세부 목록 보기#}
             function show_plan() {
                  $.ajax({
                     type: "get",
-                    url: `/detail/${plan_no}"`
+                    url: `/detail/${plan_no}"`,
                     data: {},
-                    success: function (response)
+                    success: function (response){
+                        if (response['result'] == 'success') {
+                            $.cookie('mytoken', response['token'], {path: '/'});
+                            window.location.replace("/")
+                        } else {
+                            alert(response['msg'])
+                        }
+                    }
                 });
             }
 
@@ -104,13 +112,13 @@
     <body>
     <nav id="btns-top" class="level-right is-mobile btn-top">
         <a>
-                    <button class="button is-light logout" onclick="logout()">로그아웃</button>
+            <button class="button is-light logout" onclick="sign_out()">로그아웃</button>
         </a>
     </nav>
         <section class="hero is-white">
             <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
 {#                타이틀 클릭시 로그인 페이지 리다이렉션#}
-                <h1 class="title is-sparta" onclick='window.location.replace("/index")'>오늘 뭐하지?</h1>
+                <h1 class="title is-sparta" onclick='window.location.replace("/")'>오늘 뭐하지?</h1>
             </div>
         </section>
         <section class="hero is-white">
