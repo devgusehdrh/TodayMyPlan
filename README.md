@@ -11,10 +11,6 @@
 ## 페이지 구성
 
 
-## Github
-
-[https://github.com/devgusehdrh/TodayMyPlan.git](https://github.com/devgusehdrh/TodayMyPlan.git)
-
 ## 프로젝트 1일차 진행상황
 
 - 로그인, 회원가입 구현
