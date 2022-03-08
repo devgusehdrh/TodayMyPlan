@@ -29,6 +29,22 @@ def home():
         return  redirect(url_for("login",msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login",msg="로그인 정보가 존재하지 않습니다."))
+#     닉네임으로 사용자 정보 조회
+@app.route('/userinfo/<id>')
+def getUser(id):
+    # 토큰 가져오기
+
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        status = (id == payload["id"])
+        user_info = db.users.find_one({"id": id},{"_id":False,"pw":False})
+        return render_template('user.html', user_info=user_info, status=status)
+    # return render_template('user.html')
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+
 
 @app.route('/login')
 def login():
@@ -48,6 +64,9 @@ def signUp_post():
         'id': id_receive,
         'pw': pw_hash,
         'nickName': nickName_receive,
+        'profile_greeting':"",
+        'profile_pic':'/static/img/profile/유튜브_기본프로필_파랑.jpg',
+        "profile_pic_real": '/static/img/profile/유튜브_기본프로필_파랑.jpg'
     }
 
     db.users.insert_one(doc)
@@ -62,7 +81,6 @@ def web_login_post():
 
     result = db.users.find({'id': id_receive,'pw':pw_hash}, {'_id': False})
 
-
     if result is not None:
         payload = {
             'id': id_receive,
@@ -72,6 +90,31 @@ def web_login_post():
         return jsonify({'result': 'success','token':token})
     return '', 401
 
+@app.route("/editInfo", methods=["POST"])
+def editProfile():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        id = payload["id"]
+        nickName = request.form["nickName"]
+        greeting = request.form["greeting"]
+        file = request.files["file"]
+
+        new_doc = {
+            "nickName": nickName,
+            "profile_info": greeting
+        }
+        if file:
+            filename = secure_filename(file.filename)
+            extension = filename.split(".")[-1]
+            file_path = f"{id}.{jpg}"
+            file.save("./static/img/profile/" + file_path)
+            new_doc["profile_pic"] = filename
+            new_doc["profile_pic_real"] = file_path
+        db.users.update_one({'id': payload['id']}, {'$set': new_doc})
+        return jsonify({"result": "success", 'msg': '프로필을 업데이트했습니다.'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 
 if __name__ == '__main__':

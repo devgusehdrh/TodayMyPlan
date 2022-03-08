@@ -9,7 +9,9 @@ function onSign(){
         url: '/signup',
         data: {user_id: id, password:  pw, nickName:nickName},
         success: function (response) {
-
+            if(response.msg ){
+                location.href = '/login'
+            }
         }
     });
 

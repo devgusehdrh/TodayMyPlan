@@ -22,5 +22,5 @@ function onLogin(){
 }
 
 function goSignUp(){
-
+    location.href= '/signUp'
 }
