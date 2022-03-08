@@ -1,49 +1,66 @@
+.loginCard{
+    width:500px;
+    height: 500px;
+    backdrop-filter: blur(10px) saturate(180%);
+    border-radius: 12px;
+    background: whitesmoke;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.inputs >button{
+    margin-left:20%;
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.wrap {
-    width: 700px;
-    height: 500px;
+/*.wrap {*/
+/*    width: 700px;*/
+/*    height: 500px;*/
 
-    display: flex;
-    flex-direction: column;
-}
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*}*/
 
-.wrap > img {
-    width: 250px;
-    height: 100px;
-    margin: auto;
-    margin-top: 50px;
+/*.wrap > img {*/
+/*    width: 250px;*/
+/*    height: 100px;*/
+/*    margin: auto;*/
+/*    margin-top: 50px;*/
 
-}
+/*}*/
 
-.container-login {
-    width: 400px;
-    height: 200px;
-    border: 1px solid gray;
-    margin: auto;
-    margin-top: 0;
+/*.container-login {*/
+/*    width: 400px;*/
+/*    height: 200px;*/
+/*    border: 1px solid gray;*/
+/*    margin: auto;*/
+/*    margin-top: 0;*/
 
-    display: flex;
-    flex-direction: column;
-}
-.container-input{
-    display: flex;
-    flex-direction: column;
-    width: 200px;
-    height: 60%;
-    margin:auto;
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*}*/
+/*.container-input{*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    width: 200px;*/
+/*    height: 60%;*/
+/*    margin:auto;*/
 
-}
-.container-input >input{
-    margin-top:20px;
-}
-.container-btn{
-    display: flex;
-    justify-content: space-evenly;
-    margin-bottom: 20px;
+/*}*/
+/*.container-input >input{*/
+/*    margin-top:20px;*/
+/*}*/
+/*.container-btn{*/
+/*    display: flex;*/
+/*    justify-content: space-evenly;*/
+/*    margin-bottom: 20px;*/
 
-}
+/*}*/

@@ -6,13 +6,16 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 
+import xml.etree.ElementTree as elemTree
+tree = elemTree.parse("static/config.xml")
+SECRET_KEY = tree.find('string[@name="SECRET_KEY"]').text
+
 
 app = Flask(__name__)
 
 client = MongoClient('localhost', 27017)
 db = client.miniProject
 
-SECRET_KEY  = "secretkey"
 
 
 @app.route('/')
@@ -21,7 +24,7 @@ def home():
     try:
         payload = jwt.decode(token_receive,SECRET_KEY,algorithms=['HS256'])
         user_info = db.users.find_one({"id":payload["id"]})
-        return render_template('index.html', nickname=user_info["nickName"])
+        return render_template('index.html', user_info=user_info)
     except jwt.ExpiredSignatureError:
         return  redirect(url_for("login",msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -30,9 +33,9 @@ def home():
 @app.route('/login')
 def login():
     return render_template('login.html')
-@app.route('/sign')
+@app.route('/signUp')
 def signUp():
-    return render_template('sign.html')
+    return render_template('signUp.html')
 
 @app.route("/signup", methods=["POST"])
 def signUp_post():
@@ -63,7 +66,7 @@ def web_login_post():
     if result is not None:
         payload = {
             'id': id_receive,
-            'exp': datetime.utcnow() + timedelta(seconds=5)
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
         return jsonify({'result': 'success','token':token})
