@@ -6,6 +6,9 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 
+# 숫자만 남기기 위한 패키지
+import re
+
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -18,11 +21,16 @@ db = client.todaymyplan
 
 @app.route('/')
 def home():
+    # 토큰 가져오기
     token_receive = request.cookies.get('mytoken')
     try:
+        # 토큰 복호화
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": payload["id"]})
+        # 오늘 날짜에 해당하는 계획들을 데이터베이스에서 검색
         today_plans = db.plans.find({'today': datetime.now().strftime('%Y-%m-%d')})
+        # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
         return render_template('index.html', user_info=user_info, today_plans=today_plans)
 
     except jwt.ExpiredSignatureError:
@@ -85,20 +93,32 @@ def check_dup_nick():
     exists = bool(db.users.find_one({"nickname": nickname_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
-
+# 세부 페이지 계획 포스팅 인덱스별 접속
 @app.route('/detail/<plan_no>')
 def detail(plan_no):
+    # 토큰 가져오기
     token_receive = request.cookies.get('mytoken')
+    # plan_no에서 숫자만 남기고 다른 문자를 지운다
+    plan_no = re.sub('[^0-9]', ' ', plan_no).strip()
     try:
+        # 토큰 복호화
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": payload["id"]})
+        # 사용자가 계획 클릭시 해당 계획 번호를 이용하여 포스트 정보 획득
         user_post = db.plans.find_one({"plan_no": int(plan_no)})
+        # 세부 페이지를 돌려주며 사용자 정보, 포스팅 정보, 포스팅 번호를 함께 넘겨준다.
         return render_template('detail.html', user_info=user_info, user_post=user_post, plan_no=plan_no)
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
+# 세부 페이지에 인덱스 없이 접속할 경우 home() 함수를 호출
+@app.route('/detail')
+def detail_none():
+    return home()
 
 
 # 오늘 나의 계획을 등록하는 API입니다. (메인 페이지의 ajax가 콜합니다.)
