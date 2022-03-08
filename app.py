@@ -6,7 +6,7 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 
-# 숫자만 남기기 위한 패키지
+# 정규식 표현식 불러오기
 import re
 
 
@@ -38,13 +38,18 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
-
+# 로그인 페이지
 @app.route('/login')
 def login():
+    # 만약 토큰 값을 가지고 있을 경우 home 함수를 호출
+    if request.cookies.get('mytoken'):
+        return home()
+    
     msg = request.args.get("msg")
+    # 로그인 페이지로 이동
     return render_template('login.html', msg=msg)
 
-
+# 로그인
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
     # 로그인
@@ -54,40 +59,53 @@ def sign_in():
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     result = db.users.find_one({'username': username_receive, 'password': pw_hash})
 
-    if result is not None:
+    # 아이디 및 패스워드 일치하는 사용자가 있을 경우
+    if result:
+        # 페이로드에 아이디 및 토큰 파기 시간 저장
         payload = {
-         'id': username_receive,
-         'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 5분 유지
+            'id': username_receive,
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
+            # 'exp': datetime.utcnow() + timedelta(seconds=60 * 5)  # 로그인 5분 유지
         }
+        # 토큰 생성(암호화)
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-
+        # 토큰 반환
         return jsonify({'result': 'success', 'token': token})
     # 해당 정보가 없을 경우
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
-
+# 회원가입
 @app.route('/sign_up/save', methods=['POST'])
 def sign_up():
+    # 아이디
     username_receive = request.form['username_give']
+    # 패스워드
     password_receive = request.form['password_give']
+    # 닉네임
     nickname_receive = request.form['nickname_give']
+    # 패스워드 해시값 획득
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    # 데이터베이스에 저장
     doc = {
         "username": username_receive,                               # 아이디
         "password": password_hash,                                  # 비밀번호
         "nickname": nickname_receive,                               # 닉네임
-        "profile_name": username_receive,                           # 프로필 이름 기본값은 아이디
     }
     db.users.insert_one(doc)
+    # 회원가입 성공 반환
     return jsonify({'result': 'success'})
 
+# 회원가입 시 아이디 중복 확인
 @app.route('/sign_up/check_dup', methods=['POST'])
 def check_dup():
     username_receive = request.form['username_give']
+    # 사용자 아이디 존재여부 확인
     exists = bool(db.users.find_one({"username": username_receive}))
+    # 사용자 아이디 존재여부 반환
     return jsonify({'result': 'success', 'exists': exists})
 
+# 회원가입 시 닉네임 중복 확인 - ( 현재 미작동 )
 def check_dup_nick():
     nickname_receive = request.form['nickname_give']
     exists = bool(db.users.find_one({"nickname": nickname_receive}))
