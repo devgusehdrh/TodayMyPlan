@@ -27,8 +27,6 @@ def home():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": payload["id"]})
-        today_plans = db.plans.find({'today': datetime.now().strftime('%Y-%m-%d')})
-        return render_template('index.html', user_info=user_info, today_plans=today_plans)
         # 오늘 날짜에 해당하는 계획들을 데이터베이스에서 검색
         today_plans = db.plans.find({'today': datetime.now().strftime('%Y-%m-%d')})
         # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
