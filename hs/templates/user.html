@@ -24,8 +24,6 @@
 </head>
 
 <body>
-{{user_info.profile_pic}}
-
 <div class="wraper">
     <div class="header_nav">
         <h1>로고</h1>
@@ -34,7 +32,7 @@
     <main>
         <header>
             <div class="header-wrap">
-                <img src={{user_info.profile_pic_real}}>
+                <img src={{url_for('static',filename="/img/profile/"+user_info.profile_pic_real)}}>
                 <div class="greetings-wrap">
                     <div id="nickName">{{user_info.nickName}}</div>
                     <div id="greetings">{{user_info.profile_greeting}}</div>
@@ -58,9 +56,9 @@
                 <div class="close-area" onclick="closeEditModal()">X</div>
                 <div class="content">
                     <label class="label">닉네임</label>
-                    <input id="edit-nickName" class="input" type="text" placeholder="홍길동">
+                    <input id="edit-nickName" class="input" type="text" placeholder={{user_info.nickName}}>
                     <label class="label">인사말</label>
-                    <textarea id="edit-greeting" class="textarea" placeholder="안녕하세요."></textarea>
+                    <textarea id="edit-greeting" class="textarea" placeholder={{user_info.nickName}}></textarea>
 
                     <div class="file has-name is-left">
                         <label class="file-label">
@@ -80,7 +78,7 @@
                     </div>
                     <div class="button-edit">
 
-                        <img id="preview-image" src="/static/img/profile/유튜브_기본프로필_파랑.jpg">
+                        <img id="preview-image" src={{url_for('static',filename="/img/profile/"+user_info.profile_pic_real)}}>
 
                         <button class="button is-primary" onClick="onEditInfo()">변경하기</button>
                     </div>

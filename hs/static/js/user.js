@@ -7,9 +7,6 @@ fileInput.onchange = (e) => {
     }
 }
 
-const data = document.querySelector("#template-list-item")
-const id = data.innerText.trim()
-
 
 function readImage(input) {
     // 인풋 태그에 파일이 있는 경우
@@ -55,10 +52,10 @@ function closePwModal() {
 
 function onEditInfo() {
     let nickName = document.getElementById("edit-nickName").value
-    let greeting = document.getElementById("edit-greeting")
+    let greeting = document.getElementById("edit-greeting").value
     let file = document.getElementById("file").files[0]
     let form_data = new FormData()
-
+    console.log(greeting)
     form_data.append("file", file)
     form_data.append("nickName", nickName)
     form_data.append("greeting", greeting)
@@ -72,20 +69,7 @@ function onEditInfo() {
         contentType: false,
         processData: false,
         success: function (response) {
-            closeEditModal()
-            onGetProfillData(id)
-        }
-    });
-}
-
-function onGetProfillData(id) {
-
-    $.ajax({
-        type: "GET",
-        url: "/userinfo?userinfo=${id}",
-        data: {},
-        success: function (response) {
-            console.log(response)
+            location.reload()
         }
     });
 }
