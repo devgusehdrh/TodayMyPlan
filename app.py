@@ -138,6 +138,10 @@ def post_plan():
         # plans DB에서 오늘 날짜로 등록된 전체 데이터 조회
         today_all_plans = list(db.plans.find({'today': today}, {'_id': False}))
 
+        # 현재 로그인한 유저가 오늘 등록한 계획이 이미 있다면 알림을 띄우고 포스팅을 등록을 취소합니다.
+        if len(list(db.plans.find({'today': today, 'username': user_info['username']}, {'_id': False}))) > 0:
+            return jsonify({'result': 'fail', 'msg': '이미 계획이 등록 되었습니다.'})
+
         # 오늘 등록된 플랜이 하나도 없는 경우
         if len(today_all_plans) == 0:
             # 플랜 번호 1을 부여
