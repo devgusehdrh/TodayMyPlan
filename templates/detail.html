@@ -18,16 +18,19 @@
         <!-- Font Awesome CSS -->
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+                crossorigin="anonymous"></script>
+
         <!-- JS -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
         <style>
-            {#body {#}
-            {#    background-color: RGBA(78, 52, 78, 0.2);#}
-            {#    min-height: 100vh;#}
-            {#    }#}
-
                 .section {
                 padding: 1rem 1.5rem;
                 max-width: 750px;
@@ -47,6 +50,8 @@
 
                 .is-sparta {
                 color: #0bb068 !important;
+                font-family: 'Gamja Flower', cursive;
+
                 }
                 .button.is-sparta {
                     background-color: #0bb068;
@@ -63,25 +68,63 @@
                 .help {
                     color: gray;
                 }
+
+                .btn-top {
+                    margin-top: 1rem;
+                    margin-right: 0.5rem;
+                }
+
+
         </style>
         <script>
+            let plan_no = '{{ plan_no }}'
+
+            $(document).ready(function(){
+                show_plan();
+            });
+            function sign_out() {
+                $.removeCookie('mytoken', {path: '/'});
+                alert('로그아웃 되셨습니다')
+                window.location.href = "/login"
+            }
+
+            {## 세부 목록 보기#}
+            function show_plan() {
+                 $.ajax({
+                    type: "get",
+                    url: `/detail/${plan_no}"`
+                    data: {},
+                    success: function (response)
+                });
+            }
 
          </script>
 
     </head>
     <body>
+    <nav id="btns-top" class="level-right is-mobile btn-top">
+        <a>
+                    <button class="button is-light logout" onclick="logout()">로그아웃</button>
+        </a>
+    </nav>
         <section class="hero is-white">
             <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
 {#                타이틀 클릭시 로그인 페이지 리다이렉션#}
-{#                <h1 class="title is-sparta">오늘 뭐하지?</h1>#}
-                <h1 class="title is-sparta" onclick='window.location.replace("/login")'>오늘 뭐하지?</h1>
+                <h1 class="title is-sparta" onclick='window.location.replace("/index")'>오늘 뭐하지?</h1>
             </div>
         </section>
         <section class="hero is-white">
-{#            닉네임 님의 오늘 계획입니다#}
+            <div class="card text-center" style="margin:auto" >
+                <div class="card-header is-sparta text-center" style="font-size:2rem">
+                    {{ user_post['nickname'] }} 님의 오늘 계획입니다
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" style="font-size: 1.5rem">{{ user_post['my_plan'] }}</h5>
+                </div>
+            </div>
         </section>
-        <section class="hero is-white">
-{#            내용#}
+        <section class="hero is-white" id="plan">
+
         </section>
          <section class="hero is-white">
 {#            댓글 입력창#}
