@@ -213,12 +213,5 @@ def save_comment():
 
     return jsonify({'result': 'success', 'msg': '댓글이 등록되었습니다!'})
 
-@app.route('/detail/comment-list')
-def detail_comment():
-    comments = list(db.comments.find({},{'_id':False}))
-
-    return render_template('detail.html', comments=comments)
-
-
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
