@@ -180,8 +180,11 @@ def detail(plan_no):
         user_info = db.users.find_one({"username": payload["id"]})
         # 사용자가 계획 클릭시 해당 계획 번호를 이용하여 포스트 정보 획득
         user_post = db.plans.find_one({"plan_no": int(plan_no)})
-        # 세부 페이지를 돌려주며 사용자 정보, 포스팅 정보, 포스팅 번호를 함께 넘겨준다.
-        return render_template('detail.html', user_info=user_info, user_post=user_post, plan_no=plan_no)
+        # 오늘 날짜의 댓글 입력 닉네임과 코멘트, 페이지 넘버 획득(KSJ)
+        comments = list(db.comments.find({'today': datetime.now().strftime('%Y-%m-%d')}, {'_id': False}))
+
+        # 세부 페이지를 돌려주며 사용자 정보, 포스팅 정보, 포스팅 번호, 댓글 정보를 함께 넘겨준다.
+        return render_template('detail.html', user_info=user_info, user_post=user_post, plan_no=plan_no, comments=comments)
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
@@ -194,32 +197,83 @@ def detail(plan_no):
 def detail_none():
     return home()
 
-@app.route('/detail/comment-list')
-def detail_comment():
-    comments = list(db.comments.find({},{'_id':False}))
-
-    return render_template('detail.html', comments=comments)
-
 
 @app.route('/detail/comment-registration', methods=['POST'])
 def save_comment():
     # 토큰 가져오기
     token_receive = request.cookies.get('mytoken')
-    # 토큰이 유효한 경우에만 아래 처리 실행
-    # 토큰을 복호화
-    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-    # 유저DB에서 토큰["id"]를 키로 유저검색
-    user_info = db.users.find_one({"username": payload["id"]})
-    comment_receive = request.form['comment_give']
+    try:
+        # 토큰이 유효한 경우에만 아래 처리 실행
+        # 토큰을 복호화
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 유저DB에서 토큰["id"]를 키로 유저검색
+        user_info = db.users.find_one({"username": payload["id"]})
 
-    doc = {
-        'nickname': user_info['nickname'],
-        'comment': comment_receive
-    }
-    db.comments.insert_one(doc)
+        registration_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 등록시간 (초단위까지)
+        today = datetime.now().strftime('%Y-%m-%d')  # 등록시간 (년월일)
 
-    return jsonify({'result': 'success', 'msg': '댓글이 등록되었습니다!'})
+        # [코멘트 고유번호 부여]
+        # plans DB에서 오늘 날짜로 등록된 전체 데이터 조회
+        today_all_comments = list(db.comments.find({'today': today}, {'_id': False}))
+
+        # 오늘 등록된 댓글이 하나도 없는 경우
+        if len(today_all_comments) == 0:
+            # 플랜 번호 1을 부여
+            comment_no = 1
+        # 등록된 댓글이 한 개라도 있는 경우
+        else:
+            # 람다함수를 이용, 플랜 번호를 key로 오름차순 정률 후 [-1]로 마지막 요소 추출
+            last_comment = sorted(today_all_comments, key=lambda k: k['comment_no'])[-1]
+            # 최근 등록된 댓글 번호에 1을 더해 플랜 번호 부여
+            comment_no = last_comment['comment_no'] + 1
+
+        comment_receive = request.form['comment_give']
+        plan_no_receive = request.form['plan_no_give']
+
+        doc = {
+            'nickname': user_info['nickname'],
+            'username': user_info['username'],
+            'comment': comment_receive,
+            'plan_no': plan_no_receive,
+            'comment_no': comment_no,
+            'today': today,
+            'registration_time': registration_time
+        }
+        db.comments.insert_one(doc)
+
+        return jsonify({'result': 'success', 'msg': '댓글을 등록 하였습니다!'})
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+
+
+@app.route('/detail/comment-delete', methods=['DELETE'])
+def delete_comment():
+    # 토큰 가져오기
+    token_receive = request.cookies.get('mytoken')
+    try:
+        # 토큰 복호화
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 복호화한 페이로드에서 사용자 아이디 획득
+        user_info = db.users.find_one({"username": payload["id"]})
+        today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
+
+        #날짜와 유저정보가 일치하는 댓글 데이터 삭제
+        db.comments.delete_one({'today': today, 'username': user_info['username']})
+
+        # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
+        return jsonify({'result': 'success', 'msg': '댓글을 삭제 했어요.'})
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for('/'))
+
+
 
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
+
+
+
+
+
