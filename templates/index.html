@@ -21,9 +21,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
                 crossorigin="anonymous"></script>
-        <!-- Font Awesome CSS -->
-        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
+        <!-- Font Awesome 5 CSS -->
+        <script src="https://kit.fontawesome.com/a4e4ec2ef7.js" crossorigin="anonymous"></script>
         <!-- JS -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
@@ -58,13 +57,6 @@
             width: 95%;
             max-width: 1200px;
         }
-        .card-title.plan {
-            font-weight: bold;
-        }
-        .card-body:hover {
-            background-color: #effff6;
-            cursor: pointer;
-        }
         .title.card-section {
             font-size: 45px;
             font-family: 'Gamja Flower', cursive;
@@ -73,14 +65,25 @@
         .today {
             font-weight: bold;
         }
+        .message-header p {
+            margin: auto;
+        }
+        .message:hover {
+            box-shadow: 1px 1px 20px #ddd;
+        }
+        .message-body:hover {
+            cursor: pointer;
+        }
     </style>
     <script>
+        // 로그아웃
         function logout() {
             $.removeCookie('mytoken');
             alert('로그아웃')
             window.location.href='/'
         }
 
+        // 오늘의 계획 포스팅
         function post() {
             const myPlan = $('#textarea-post').val()
 
@@ -98,6 +101,26 @@
                     }
                 }
             })
+        }
+
+        // 오늘 포스팅 한 플랜 삭제
+        function mypost_delete() {
+            const unpost = confirm('오늘 계획을 정말 삭제 할까요?')
+            if(unpost == true){
+                $.ajax({
+                    url: "/DELETE/plan",
+                    type: "DELETE",
+                    data: {},
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            alert(response['msg'])
+                            window.location.reload()
+                        } else {
+                            window.location.replace('/')
+                        }
+                    }
+                })
+            }
         }
     </script>
     <body>
@@ -142,22 +165,34 @@
             </div>
         </section>
         <div class="mycards">
-            <div class="row row-cols-1 row-cols-md-4 g-4">
+            <div class="row row-cols-1 row-cols-md-3 g-3">
                 {% for plan in today_plans %}
-                <div class="col" onclick="location.href='/detail/{{ plan.plan_no }}'">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title plan">{{ plan.nickname }}님의 오늘 계획</h5>
-                            <p class="card-text">{{ plan.my_plan }}</p>
-                            <p id="plan_no" style="display:none">{{ plan.plan_no }}</p>
-                            <p id="plan_day" style="display:none">{{ plan.today }}</p>
+                <div class="col">
+                    <article class="message is-warning">
+                        <div class="message-header">
+                            <i class="fa-solid fa-comment-dots"></i>
+                            <p>{{ plan.nickname }} 님의 오늘 계획</p>
+                            {% if plan['username'] == user_info['username'] %}
+                            <button class="delete" aria-label="delete" onclick="mypost_delete()"></button>
+                            {% endif %}
                         </div>
-                    </div>
+                        <!-- 내 포스팅인 경우 수정 modal 팝업 -->
+                        {% if plan['username'] == user_info['username'] %}
+                        <div class="message-body">
+                            {{ plan.my_plan }}
+                        </div>
+                        <!-- 내 포스팅이 아닌 경우 상세페이지로 이동 -->
+                        {% elif plan['username'] != user_info['username'] %}
+                        <div class="message-body" onclick="location.href='/detail/{{ plan.plan_no }}'">
+                            {{ plan.my_plan }}
+                        </div>
+                        {% endif %}
+                    </article>
                 </div>
                 {% endfor %}
             </div>
         </div>
-        <!-- 포스팅 박스 modal -->
+        <!-- 포스팅 등록 박스 modal -->
         <div class="modal" id="modal-post">
             <div class="modal-background" onclick='$("#modal-post").removeClass("is-active")'></div>
             <div class="modal-content">

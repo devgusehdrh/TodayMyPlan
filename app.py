@@ -161,10 +161,32 @@ def post_plan():
         # myPlan DB에 유저의 계획 등록
         db.plans.insert_one(doc)
         # json형태로 response 반환
-        return jsonify({'result': 'success', 'msg': '오늘의 계획이 등록되었습니다!'})
+        return jsonify({'result': 'success', 'msg': '오늘의 계획을 등록 했어요!'})
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for("/"))
+
+# 오늘 계획 삭제
+@app.route('/DELETE/plan', methods=['DELETE'])
+def delete_plan():
+    # 토큰 가져오기
+    token_receive = request.cookies.get('mytoken')
+    try:
+        # 토큰 복호화
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 복호화한 페이로드에서 사용자 아이디 획득
+        user_info = db.users.find_one({"username": payload["id"]})
+        today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
+
+        db.plans.delete_one({'today': today, 'username': user_info['username']})
+
+        # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
+        return jsonify({'result': 'success', 'msg': '계획을 삭제 했어요.'})
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for('/'))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for('/'))
 
 
 # 세부 페이지 계획 포스팅 인덱스별 접속
