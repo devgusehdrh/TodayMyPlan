@@ -308,14 +308,14 @@ def detail(plan_no):
     # 토큰 가져오기
     token_receive = request.cookies.get('mytoken')
     # plan_no에서 숫자만 남기고 다른 문자를 지운다
-    plan_no = int(re.sub('[^0-9]', ' ', plan_no).strip())
+    plan_no = re.sub('[^0-9]', ' ', plan_no).strip()
     try:
         # 토큰 복호화
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": payload["id"]})
         # 사용자가 계획 클릭시 해당 계획 번호를 이용하여 포스트 정보 획득
-        user_plan = db.plans.find_one({'today': datetime.now().strftime('%Y-%m-%d'), 'plan_no': plan_no},{'_id':False})
+        user_plan = db.plans.find_one({"plan_no": int(plan_no)})
         # 오늘 날짜의 댓글 입력 닉네임과 코멘트, 페이지 넘버 획득
         comments = list(db.comments.find({'today': datetime.now().strftime('%Y-%m-%d')}, {'_id': False}))
 
@@ -401,4 +401,4 @@ def delete_comment():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run('0.0.0.0', port=4000, debug=True)
