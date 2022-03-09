@@ -96,7 +96,7 @@ def sign_up():
         "password": password_hash,                                  # 비밀번호
         "nickname": nickname_receive,                               # 닉네임
         'profile_greeting': "",                                     # 기본 인사말
-        "profile_pic_real": '유튜브_기본프로필_파랑.jpg'   # 프로필 이미지 경로
+        "profile_pic_real": '유튜브_기본프로필_파랑.jpg'                  # 프로필 이미지 경로
 
     }
     db.users.insert_one(doc)

@@ -38,11 +38,13 @@
 
                 </div>
             </div>
+            {%if  status %}
             <div class="group-btn">
                 <button class="primary-btn" id="editBtn" onclick="showEditModal()">프로필 수정</button>
                 <button class="primary-btn" id="change-pw" onclick="showPwModal()">비밀번호 변경</button>
 
             </div>
+            {% endif %}
             <hr/>
 
         </header>

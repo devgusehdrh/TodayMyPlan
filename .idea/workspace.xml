@@ -1,33 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="f67a8cb9-3a92-4eaf-80a8-4de81f6bec9a" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/TodayMyPlan.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TodayMyPlan.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/hs/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/hs/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs/static/js/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/hs/static/js/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs/templates/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/hs/templates/user.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/detail.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/login.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/main.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/posting.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/profile/as1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_갈색.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_녹색.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_보라.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_자주.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_주황.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_차콜.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_청녹.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_파랑.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_하늘색.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/signup.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,6 +30,10 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager">
@@ -91,7 +74,7 @@
       <option name="presentableId" value="Default" />
       <updated>1646806704040</updated>
       <workItem from="1646806713023" duration="251000" />
-      <workItem from="1646807029872" duration="865000" />
+      <workItem from="1646807029872" duration="3303000" />
     </task>
     <servers />
   </component>
