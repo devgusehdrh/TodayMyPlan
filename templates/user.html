@@ -29,6 +29,7 @@
         <button id="log-out" class="primary-btn" onclick="sign_out()">로그아웃</button>
     </div>
     <main>
+        <!--       헤더 -->
         <header>
             <div class="header-wrap">
                 <img src={{ url_for('static',filename="/img/profile/"+user_info.profile_pic_real) }}/>
@@ -46,91 +47,106 @@
                 </div>
             {% endif %}
             <hr/>
-            <div class="mycards">
-                <div class="row row-cols-1 row-cols-md-4 g-4">
 
-                        <div class="col" onclick="location.href='/detail/{{ my_plan.plan_no }}'">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title plan">{{ my_plan.nickname }}님의 오늘 계획</h5>
-                                    <p class="card-text">{{ my_plan.my_plan }}</p>
-                                    <p id="plan_no" style="display:none">{{ my_plan.plan_no }}</p>
-                                    <p id="plan_day" style="display:none">{{ my_plan.today }}</p>
-                                </div>
+        </header>
+
+        <div class="space"></div>
+        <!--        포스트 영역-->
+        {#    my plan이 없는지 확인#}
+        {% if my_plan.nickname | length != 0 %}
+            <div class="mycards">
+                <div class="row row-cols-1 row-cols-md-3 g-3">
+
+                    <div class="col">
+                        <article class="message is-warning">
+                            <div class="message-header">
+                                <i class="fa-solid fa-comment-dots"></i>
+                                <p>{{ my_plan.nickname }} 님의 오늘 계획</p>
+                                {% if status %}
+                                    <button onclick='$("#modal-modify").addClass("is-active")'
+                                            class="button is-rounded is-small">수정
+                                    </button>
+                                    <button class="delete" aria-label="delete" onclick="mypost_delete()"></button>
+                                {% endif %}
                             </div>
-                        </div>
+                            <div class="message-body" onclick="location.href='/detail/{{ my_plan.plan_no }}'">
+                                {{ my_plan.my_plan }}
+                            </div>
+                        </article>
+                    </div>
 
                 </div>
             </div>
-        </header>
-        <!--       프로필 수정 모달 -->
-        <div id="edit-modal" class="modal-overlay">
-            <div class="modal-window">
-                <div class="title">
-                    <h2>프로필 수정</h2>
-                </div>
-                <div class="close-area" onclick="closeEditModal()">X</div>
-                <div class="content">
-                    <label class="label">닉네임</label>
-                    <input id="edit-nickName" class="input" type="text" placeholder={{ user_info.nickname }}>
-                    <label class="label">인사말</label>
-                    <textarea id="edit-greeting" class="textarea"
-                              placeholder={{ user_info.profile_greeting }}></textarea>
+        {% endif %}
+    </main>
+        <!--       모달 영역 -->
+        <div>
+            <!--       프로필 수정 모달 -->
+            <div id="edit-modal" class="modal-overlay">
+                <div class="modal-window">
+                    <div class="title">
+                        <h2>프로필 수정</h2>
+                    </div>
+                    <div class="close-area" onclick="closeEditModal()">X</div>
+                    <div class="content">
+                        <label class="label">닉네임</label>
+                        <input id="edit-nickName" class="input" type="text" placeholder={{ user_info.nickname }}>
+                        <label class="label">인사말</label>
+                        <textarea id="edit-greeting" class="textarea"
+                                  placeholder={{ user_info.profile_greeting }}></textarea>
 
-                    <div class="file has-name is-left">
-                        <label class="file-label">
-                            <input id="file" class="file-input" type="file" name="resume">
-                            <span class="file-cta">
+                        <div class="file has-name is-left">
+                            <label class="file-label">
+                                <input id="file" class="file-input" type="file" name="resume">
+                                <span class="file-cta">
 
                                       <span class="file-label">
                                         파일선택
                                       </span>
                                     </span>
-                            <span class="file-name">
+                                <span class="file-name">
                                 이미지 경로
                             </span>
 
-                        </label>
+                            </label>
 
-                    </div>
-                    <div class="button-edit">
+                        </div>
+                        <div class="button-edit">
 
-                        <img id="preview-image"
-                             src={{ url_for('static',filename="/img/profile/"+user_info.profile_pic_real) }}>
+                            <img id="preview-image"
+                                 src={{ url_for('static',filename="/img/profile/"+user_info.profile_pic_real) }}>
 
-                        <button class="button is-primary" onClick="onEditInfo()">변경하기</button>
-                    </div>
+                            <button class="button is-primary" onClick="onEditInfo()">변경하기</button>
+                        </div>
 
-                </div>
-            </div>
-        </div>
-        <!--비밀번호 변경 모달 -->
-        <div id="pw-modal" class="modal-overlay">
-            <div class="modal-window-pw">
-                <div class="title">
-                    <h2>비밀번호 변경</h2>
-                </div>
-                <div class="close-area" onclick="closePwModal()">X</div>
-                <div class="content">
-
-                    <div class="field">
-                        <input onchange="checkPw()" id="pw" class="input" type="password" placeholder="바꿀 비밀 번호">
-                        <p id="help-password" class="help ">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도 사용
-                            가능합니다.</p>
-                    </div>
-                    <div class="field">
-                        <input onchange="chkRePw()" id="chkPw" class="input" type="password" placeholder="다시 입력">
-                        <p id="help-password2" class="help ">비밀번호를 다시 한 번 입력해주세요.</p>
-                    </div>
-                    <div class="button-edit">
-                        <button class="button is-primary" onclick="onChangePw()">변경하기</button>
                     </div>
                 </div>
             </div>
+            <!--비밀번호 변경 모달 -->
+            <div id="pw-modal" class="modal-overlay">
+                <div class="modal-window-pw">
+                    <div class="title">
+                        <h2>비밀번호 변경</h2>
+                    </div>
+                    <div class="close-area" onclick="closePwModal()">X</div>
+                    <div class="content">
+
+                        <div class="field">
+                            <input onchange="checkPw()" id="pw" class="input" type="password" placeholder="바꿀 비밀 번호">
+                            <p id="help-password" class="help ">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도 사용
+                                가능합니다.</p>
+                        </div>
+                        <div class="field">
+                            <input onchange="chkRePw()" id="chkPw" class="input" type="password" placeholder="다시 입력">
+                            <p id="help-password2" class="help ">비밀번호를 다시 한 번 입력해주세요.</p>
+                        </div>
+                        <div class="button-edit">
+                            <button class="button is-primary" onclick="onChangePw()">변경하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="space"></div>
-        <!--        포스트 오면 됌-->
-    </main>
 </div>
 <script id="template-list-item" type="text/template">
     {{ user_info.username }}
