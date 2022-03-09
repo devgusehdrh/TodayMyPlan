@@ -12,8 +12,10 @@ import re
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+# 비밀키 설정
 SECRET_KEY = 'SPARTA'
 
+# 몽고DB 연결
 client = MongoClient('mongodb://127.0.0.1', 27017)
 db = client.todaymyplan
 
@@ -55,11 +57,14 @@ def login():
 # 로그인
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
-    # 로그인
+    # 아이디
     username_receive = request.form['username_give']
+    # 패스워드
     password_receive = request.form['password_give']
 
+    # 패스워드 암호화(해시함수)
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    # 아이디, 패스워드 값을 이용하여 데이터베이스에서 검색
     result = db.users.find_one({'username': username_receive, 'password': pw_hash})
 
     # 아이디 및 패스워드 일치하는 사용자가 있을 경우
@@ -91,9 +96,9 @@ def sign_up():
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     # 데이터베이스에 저장
     doc = {
-        "username": username_receive,  # 아이디
-        "password": password_hash,  # 비밀번호
-        "nickname": nickname_receive,  # 닉네임
+        "username": username_receive,                               # 아이디
+        "password": password_hash,                                  # 비밀번호
+        "nickname": nickname_receive,                               # 닉네임
     }
     db.users.insert_one(doc)
     # 회원가입 성공 반환
@@ -222,7 +227,7 @@ def detail(plan_no):
     # 토큰 가져오기
     token_receive = request.cookies.get('mytoken')
     # plan_no에서 숫자만 남기고 다른 문자를 지운다
-    plan_no = re.sub('[^0-9]', ' ', plan_no).strip()
+    plan_no = int(re.sub('[^0-9]', ' ', plan_no).strip())
     try:
         # 토큰 복호화
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
