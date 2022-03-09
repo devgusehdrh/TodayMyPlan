@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f67a8cb9-3a92-4eaf-80a8-4de81f6bec9a" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/detail.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/detail.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/login.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/login.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/main.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/main.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/posting.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/posting.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/signup.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/signup.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/styles/user.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/styles/user.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user.html" afterDir="false" />
-    </list>
+    <list default="true" id="f67a8cb9-3a92-4eaf-80a8-4de81f6bec9a" name="변경" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
