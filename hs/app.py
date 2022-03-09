@@ -107,7 +107,7 @@ def editProfile():
         if 'file' in request.files:
             file = request.files["file"]
             filename = secure_filename(file.filename)
-            extension = filename.split(".")[-1]
+            # extension = filename.split(".")[-1]
             file_path = f"{id}.jpg"
             file.save("./static/img/profile/" + file_path)
 
@@ -118,5 +118,20 @@ def editProfile():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
+@app.route("/editPw", methods=["POST"])
+def changePw():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        password = request.form.get('password')
+        pw_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+        new_doc = {
+            "pw": pw_hash,
+        }
+
+        db.users.update_one({'id': payload['id']}, {'$set': new_doc})
+        return jsonify({"result": "success", 'msg': '비밀번호 변경 완료했습니다.'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
