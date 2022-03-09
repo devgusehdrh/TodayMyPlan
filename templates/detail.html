@@ -91,7 +91,7 @@
         function show_plan() {
             $.ajax({
                 type: "get",
-                url: `/detail/${plan_no}`,
+                url: `/detail/{{plan_no}}`,
                 data: {},
                 success: function (response){
                 }
@@ -162,7 +162,7 @@
                     type: "POST",
                     url: `/detail/comment-registration`,
                     data: { comment_give: Mycomment,
-                            plan_no_give: plan_no
+                            plan_no_give: {{ plan_no }}
                     },
                     success: function (response) {
                         alert(response["msg"])
