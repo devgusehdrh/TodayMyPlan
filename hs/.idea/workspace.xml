@@ -5,8 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e78ad700-e32a-43cd-a3c9-020b37babee5" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/TodayMyPlan.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/TodayMyPlan.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/detail.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/main.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/posting.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/profile/as1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/profile/유튜브_기본프로필_갈색.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/profile/유튜브_기본프로필_녹색.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/profile/유튜브_기본프로필_보라.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/profile/유튜브_기본프로필_자주.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/profile/유튜브_기본프로필_주황.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/profile/유튜브_기본프로필_차콜.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/profile/유튜브_기본프로필_청녹.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/profile/유튜브_기본프로필_파랑.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/profile/유튜브_기본프로필_하늘색.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../img/signup.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +59,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="265y8SbaWaDZZFIoVTJlJLngti0" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -45,8 +68,9 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -61,17 +85,17 @@
   </component>
   <component name="RunManager" selected="Python.app">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="hs" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\HHS\AppData\Local\Programs\Python\Python38\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/app.py" />
       <option name="PARAMETERS" value="" />
@@ -130,6 +154,8 @@
       <workItem from="1646727584112" duration="4225000" />
       <workItem from="1646731888868" duration="32000" />
       <workItem from="1646731970839" duration="13755000" />
+      <workItem from="1646800945805" duration="3959000" />
+      <workItem from="1646806616985" duration="333000" />
     </task>
     <servers />
   </component>
@@ -152,14 +178,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/static/js/sign.js</url>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/hs$app.coverage" NAME="app 커버리지 결과" MODIFIED="1646784878153" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/hs$app.coverage" NAME="app 커버리지 결과" MODIFIED="1646803310642" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/hs$Flask__app_py_.coverage" NAME="Flask (app.py) 커버리지 결과" MODIFIED="1646731672160" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/hs$hs.coverage" NAME="hs 커버리지 결과" MODIFIED="1646731662084" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>

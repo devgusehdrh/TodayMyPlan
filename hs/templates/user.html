@@ -31,7 +31,7 @@
     <main>
         <header>
             <div class="header-wrap">
-                <img src={{ url_for('static',filename="/img/profile/"+user_info.profile_pic_real) }}>
+                <img src={{ url_for('static',filename="/img/profile/"+user_info.profile_pic_real) }}/>
                 <div class="greetings-wrap">
                     <div id="nickName">{{ user_info.nickName }}</div>
                     <div id="greetings">{{ user_info.profile_greeting }}</div>
@@ -61,7 +61,7 @@
 
                     <div class="file has-name is-left">
                         <label class="file-label">
-                            <input id="file" class="file-input" type="file" name="resume">
+                            <input id="file" class="file-input" type="file" name="resume"/>
                             <span class="file-cta">
 
                                       <span class="file-label">
@@ -78,14 +78,15 @@
                     <div class="button-edit">
 
                         <img id="preview-image"
-                             src={{ url_for('static',filename="/img/profile/"+user_info.profile_pic_real) }}>
+                             src={{ url_for('static',filename="/img/profile/"+user_info.profile_pic_real) }}/>
+                                   <button class="button is-primary" onClick="onEditInfo()">변경하기</button>
 
-                        <button class="button is-primary" onClick="onEditInfo()">변경하기</button>
                     </div>
 
                 </div>
             </div>
         </div>
+
         <!--비밀번호 변경 모달 -->
         <div id="pw-modal" class="modal-overlay">
             <div class="modal-window-pw">
@@ -114,9 +115,7 @@
         <!--        포스트 오면 됌-->
     </main>
 </div>
-<script id="template-list-item" type="text/template">
-    {{ user_info.id }}
-</script>
+
 <script src="../static/js/user.js"></script>
 </body>
 

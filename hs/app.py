@@ -66,7 +66,7 @@ def signUp_post():
         'nickName': nickName_receive,
         'profile_greeting':"",
         'profile_pic':'/static/img/profile/유튜브_기본프로필_파랑.jpg',
-        "profile_pic_real": '/static/img/profile/유튜브_기본프로필_파랑.jpg'
+        "profile_pic_real": '유튜브_기본프로필_파랑.jpg'
     }
 
     db.users.insert_one(doc)

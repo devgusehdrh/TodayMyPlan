@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f67a8cb9-3a92-4eaf-80a8-4de81f6bec9a" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/TodayMyPlan.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TodayMyPlan.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/hs/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/hs/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs/static/js/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/hs/static/js/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs/templates/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/hs/templates/user.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/detail.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/login.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/main.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/posting.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/profile/as1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_갈색.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_녹색.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_보라.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_자주.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_주황.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_차콜.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_청녹.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_파랑.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/profile/유튜브_기본프로필_하늘색.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/signup.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="268YVOcuN1zkmsfdqbyitvO0IjX" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager">
+    <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="TodayMyPlan" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/app.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.app" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="디폴트 작업">
+      <changelist id="f67a8cb9-3a92-4eaf-80a8-4de81f6bec9a" name="변경" comment="" />
+      <created>1646806704040</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1646806704040</updated>
+      <workItem from="1646806713023" duration="251000" />
+      <workItem from="1646807029872" duration="865000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/TodayMyPlan$app.coverage" NAME="app 커버리지 결과" MODIFIED="1646807034271" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/TodayMyPlan$TodayMyPlan.coverage" NAME="TodayMyPlan 커버리지 결과" MODIFIED="1646806719081" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+  </component>
+</project>

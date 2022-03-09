@@ -31,9 +31,9 @@
     <main>
         <header>
             <div class="header-wrap">
-                <img src={{ url_for('static',filename="/img/profile/"+user_info.profile_pic_real) }}>
+                <img src={{ url_for('static',filename="/img/profile/"+user_info.profile_pic_real) }}/>
                 <div class="greetings-wrap">
-                    <div id="nickName">{{ user_info.nickName }}</div>
+                    <div id="nickName">{{ user_info.nickname }}</div>
                     <div id="greetings">{{ user_info.profile_greeting }}</div>
 
                 </div>
@@ -55,9 +55,9 @@
                 <div class="close-area" onclick="closeEditModal()">X</div>
                 <div class="content">
                     <label class="label">닉네임</label>
-                    <input id="edit-nickName" class="input" type="text" placeholder={{ user_info.nickName }}>
+                    <input id="edit-nickName" class="input" type="text" placeholder={{ user_info.nickname }}>
                     <label class="label">인사말</label>
-                    <textarea id="edit-greeting" class="textarea" placeholder={{ user_info.nickName }}></textarea>
+                    <textarea id="edit-greeting" class="textarea" placeholder={{ user_info.profile_greeting }}></textarea>
 
                     <div class="file has-name is-left">
                         <label class="file-label">
@@ -115,7 +115,7 @@
     </main>
 </div>
 <script id="template-list-item" type="text/template">
-    {{ user_info.id }}
+    {{ user_info.username }}
 </script>
 <script src="../static/js/user.js"></script>
 </body>

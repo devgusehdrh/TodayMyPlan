@@ -95,6 +95,9 @@ def sign_up():
         "username": username_receive,                               # 아이디
         "password": password_hash,                                  # 비밀번호
         "nickname": nickname_receive,                               # 닉네임
+        'profile_greeting': "",                                     # 기본 인사말
+        "profile_pic_real": '유튜브_기본프로필_파랑.jpg'   # 프로필 이미지 경로
+
     }
     db.users.insert_one(doc)
     # 회원가입 성공 반환
@@ -116,6 +119,7 @@ def check_dup_nick():
     nickname_receive = request.form['nickname_give']
     exists = bool(db.users.find_one({"nickname": nickname_receive}))
     return jsonify({'result': 'success', 'exists': exists})
+
 #프로필 페이지
 @app.route('/userinfo/<id>')
 def getUser(id):
@@ -125,7 +129,8 @@ def getUser(id):
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         status = (id == payload["id"])
-        user_info = db.users.find_one({"id": id},{"_id":False,"pw":False})
+
+        user_info = db.users.find_one({"username": id},{"_id":False})
         return render_template('user.html', user_info=user_info, status=status)
     # return render_template('user.html')
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
@@ -219,9 +224,10 @@ def editProfile():
 
 
         new_doc = {
-            "nickName": nickName,
+            "nickname": nickName,
             "profile_greeting": greeting
         }
+
         if 'file' in request.files:
             file = request.files["file"]
             filename = secure_filename(file.filename)
@@ -229,9 +235,9 @@ def editProfile():
             file_path = f"{id}.jpg"
             file.save("./img/profile/" + file_path)
 
-            new_doc["profile_pic"] = filename
             new_doc["profile_pic_real"] = file_path
-        db.users.update_one({'id': payload['id']}, {'$set': new_doc})
+
+        db.users.update_one({'username': payload['id']}, {'$set': new_doc})
         return jsonify({"result": "success", 'msg': '프로필을 업데이트했습니다.'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
@@ -244,10 +250,10 @@ def changePw():
         password = request.form.get('password')
         pw_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
         new_doc = {
-            "pw": pw_hash,
+            "password": pw_hash,
         }
 
-        db.users.update_one({'id': payload['id']}, {'$set': new_doc})
+        db.users.update_one({'username': payload['id']}, {'$set': new_doc})
         return jsonify({"result": "success", 'msg': '비밀번호 변경 완료했습니다.'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))

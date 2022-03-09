@@ -64,7 +64,6 @@ function onEditInfo() {
 
     if (nickName.trim().length !== 0) {
         const form_data = new FormData()
-
         form_data.append("file", file)
         form_data.append("nickName", nickName)
         form_data.append("greeting", greeting)
@@ -77,8 +76,8 @@ function onEditInfo() {
             contentType: false,
             processData: false,
             success: function (response) {
+                closeEditModal()
                 location.reload()
-
             }
         });
     }
@@ -97,7 +96,8 @@ function onChangePw() {
         url: '/editPw',
         data: {password: password},
         success: function (response) {
-            console.log(response)
+            closePwModal()
+                location.reload()
 
         }
     });

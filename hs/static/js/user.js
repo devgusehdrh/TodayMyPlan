@@ -57,6 +57,7 @@ function closePwModal() {
 
 //프로필 수정 변경
 function onEditInfo() {
+    console.log("hi")
     const nickName = document.getElementById("edit-nickName").value
     const greeting = document.getElementById("edit-greeting").value
     const file = document.getElementById("file").files[0]
@@ -77,7 +78,7 @@ function onEditInfo() {
             contentType: false,
             processData: false,
             success: function (response) {
-                location.reload()
+                // location.reload()
 
             }
         });

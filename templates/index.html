@@ -99,6 +99,11 @@
                 }
             })
         }
+        //22.03.09 홍현승 회원정보 수정 페이지 이동
+        function goUserInfo(){
+             const id = "{{ user_info.username }}"
+            location.href=`/userinfo/${id}`
+        }
     </script>
     <body>
         <div class="container">
@@ -124,7 +129,7 @@
                     {{ user_info['nickname'] }}님, 오늘도 화이팅!
                 </div>
                 <div class="col-1" style="margin:auto">
-                    <button class="button is-success is-outlined edit" onclick="location.href='/userinfo-modify'">회원정보수정</button>
+                    <button class="button is-success is-outlined edit" onclick="goUserInfo()">회원정보</button>
                 </div>
                 <div class="col-1" style="margin:auto">
                     <button class="button is-light logout" onclick="logout()">로그아웃</button>
@@ -202,4 +207,5 @@
         let date = week[getDate]
         document.getElementById("date").innerHTML = year + '년 ' + month + '월 ' + day + '일 ' + date + "요일"
     </script>
+
 </html>
