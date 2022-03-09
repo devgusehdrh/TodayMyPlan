@@ -166,13 +166,11 @@
                 }
             })
         }
-<<<<<<< HEAD
      //22.03.09 홍현승 회원정보 수정 페이지 이동
         function goUserInfo(){
              const id = "{{ user_info.username }}"
             location.href=`/userinfo/${id}`
         }
-=======
         //오늘 댓글 저장
              function save_comment() {
                 let Mycomment = $('#comment').val()
@@ -210,7 +208,6 @@
             }
 
 
->>>>>>> 6cab529425577345e66f63435c036d0959d045d1
 
     </script>
     <body>
@@ -260,7 +257,7 @@
                     <div class="col">
                         <article class="message is-info">
                             <div class="message-header">
-                                <i class="fa-solid fa-comment-dots" style="float:center"></i>
+                                <i class="fa-solid fa-comment-dots"></i>
                                 <p class="is-centered" style="font-size:22px">{{ user_plan.nickname }} 님의 오늘 계획입니다.</p>
                                 {% if user_plan['username'] == user_info['username'] %}
                                     <button onclick='$("#modal-modify").addClass("is-active")' class="button is-rounded is-small">수정</button>

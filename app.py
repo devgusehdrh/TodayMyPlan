@@ -219,8 +219,13 @@ def delete_plan():
         # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": payload["id"]})
         today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
-
+        # 포스트 번호 획득
+        plan_no = str(db.plans.find_one({'today': today, 'username': user_info['username']})['plan_no'])
+        # 포스트 삭제 시 해당 포스트에 달린 코멘트 모두 삭제
+        db.comments.delete_many({'today': today, 'plan_no': plan_no})
+        # 포스트 삭제
         db.plans.delete_one({'today': today, 'username': user_info['username']})
+
 
         # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
         return jsonify({'result': 'success', 'msg': '계획을 삭제 했어요.'})
@@ -316,8 +321,10 @@ def detail(plan_no):
         user_info = db.users.find_one({"username": payload["id"]})
         # 사용자가 계획 클릭시 해당 계획 번호를 이용하여 포스트 정보 획득
         user_plan = db.plans.find_one({'today': datetime.now().strftime('%Y-%m-%d'),"plan_no": int(plan_no)},{'_id':False})
+
         # 오늘 날짜의 댓글 입력 닉네임과 코멘트, 페이지 넘버 획득
         comments = list(db.comments.find({'today': datetime.now().strftime('%Y-%m-%d')}, {'_id': False}))
+
 
         # 세부 페이지를 돌려주며 사용자 정보, 포스팅 정보, 포스팅 번호, 댓글 정보를 함께 넘겨준다.
         return render_template('detail.html', user_info=user_info, user_plan=user_plan, plan_no=plan_no, comments=comments)
