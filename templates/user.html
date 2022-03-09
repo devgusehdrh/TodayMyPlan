@@ -46,22 +46,35 @@
                 </div>
             {% endif %}
             <hr/>
-            <div class="mycards">
-                <div class="row row-cols-1 row-cols-md-4 g-4">
 
-                        <div class="col" onclick="location.href='/detail/{{ my_plan.plan_no }}'">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title plan">{{ my_plan.nickname }}님의 오늘 계획</h5>
-                                    <p class="card-text">{{ my_plan.my_plan }}</p>
-                                    <p id="plan_no" style="display:none">{{ my_plan.plan_no }}</p>
-                                    <p id="plan_day" style="display:none">{{ my_plan.today }}</p>
-                                </div>
+        {% if my_plan.nickname | length != 0  %}
+
+            <div class="mycards">
+                <div class="row row-cols-1 row-cols-md-3 g-3">
+
+                    <div class="col">
+                        <article class="message is-warning">
+                            <div class="message-header">
+                                <i class="fa-solid fa-comment-dots"></i>
+                                <p>{{ my_plan.nickname }} 님의 오늘 계획</p>
+
+                                {% if status %}
+                                    <button onclick='$("#modal-modify").addClass("is-active")'
+                                            class="button is-rounded is-small">수정
+                                    </button>
+                                    <button class="delete" aria-label="delete" onclick="mypost_delete()"></button>
+                                {% endif %}
                             </div>
-                        </div>
+                            <div class="message-body" onclick="location.href='/detail/{{ my_plan.plan_no }}'">
+                                {{ my_plan.my_plan }}
+                            </div>
+                        </article>
+                    </div>
 
                 </div>
             </div>
+        {% endif %}
+
         </header>
         <!--       프로필 수정 모달 -->
         <div id="edit-modal" class="modal-overlay">

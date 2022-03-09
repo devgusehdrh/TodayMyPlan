@@ -205,17 +205,37 @@ img {
     max-width: 1200px;
 }
 
-.card-title.plan {
-    font-weight: bold;
-}
-
-.card-body:hover {
-    background-color: #effff6;
-    cursor: pointer;
-}
-
 .title.card-section {
     font-size: 45px;
     font-family: 'Gamja Flower', cursive;
     font-family: 'Single Day', cursive;
+}
+
+.today {
+    font-weight: bold;
+}
+
+.message-header p {
+    margin: auto;
+}
+
+.message:hover {
+    box-shadow: 1px 1px 20px #ddd;
+}
+
+.message-body:hover {
+    cursor: pointer;
+}
+
+.button.is-rounded.is-small {
+    background-color: #fffbeb;
+    border-color: #fffbeb;
+    margin-right: 5px;
+    font-size: 10px;
+}
+
+.button.is-rounded.is-small:hover {
+    background-color: #4c421a;
+    border-color: #80511a;
+    color: #ffffff;
 }
