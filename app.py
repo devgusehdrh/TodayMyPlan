@@ -314,7 +314,7 @@ def delete_comment():
         plan_no = db.comments.find_one({'username': user_info['username']})
 
         #날짜와 유저정보가 일치하는 댓글 데이터 삭제
-        db.comments.delete_one({'today': today, 'username': user_info['username'], 'plan_no': plan_no})
+        db.comments.delete_one({'today': today, 'username': user_info['username'], 'plan_no': plan_no['plan_no']})
 
         # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
         return jsonify({'result': 'success', 'msg': '댓글을 삭제 했어요.'})
@@ -326,4 +326,4 @@ def delete_comment():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run('0.0.0.0', port=4000, debug=True)
