@@ -74,6 +74,17 @@
         .message-body:hover {
             cursor: pointer;
         }
+        .button.is-rounded.is-small {
+            background-color: #fffbeb;
+            border-color: #fffbeb;
+            margin-right: 5px;
+            font-size: 10px;
+        }
+        .button.is-rounded.is-small:hover {
+            background-color: #4c421a;
+            border-color: #80511a;
+            color: #ffffff;
+        }
     </style>
     <script>
         // 로그아웃
@@ -156,7 +167,7 @@
                     <div class="field has-addons">
                         <div class="control" style="width:100%">
                             <form id="form_box1">
-                                <input id="input-username-modal" class="input" type="textarea"
+                                <input readonly="readonly" id="input-username-modal" class="input" type="textarea"
                                        placeholder="오늘의 계획을 입력해주세요!" onclick='$("#modal-post").addClass("is-active")'>
                             </form>
                         </div>
@@ -192,20 +203,13 @@
                             <i class="fa-solid fa-comment-dots"></i>
                             <p>{{ plan.nickname }} 님의 오늘 계획</p>
                             {% if plan['username'] == user_info['username'] %}
-                            <button class="delete" aria-label="delete" onclick="mypost_delete()"></button>
+                                <button onclick='$("#modal-modify").addClass("is-active")' class="button is-rounded is-small">수정</button>
+                                <button class="delete" aria-label="delete" onclick="mypost_delete()"></button>
                             {% endif %}
                         </div>
-                        <!-- 내 포스팅인 경우 수정 modal 팝업 -->
-                        {% if plan['username'] == user_info['username'] %}
-                        <div class="message-body" onclick='$("#modal-modify").addClass("is-active")'>
-                            {{ plan.my_plan }}
-                        </div>
-                        <!-- 내 포스팅이 아닌 경우 상세페이지로 이동 -->
-                        {% elif plan['username'] != user_info['username'] %}
                         <div class="message-body" onclick="location.href='/detail/{{ plan.plan_no }}'">
                             {{ plan.my_plan }}
                         </div>
-                        {% endif %}
                     </article>
                 </div>
                 {% endfor %}
@@ -262,9 +266,6 @@
                                 <div class="level-right">
                                     <div class="level-item">
                                         <button onclick="mypost_modify()" class="button posting">내용 변경</button>
-                                    </div>
-                                    <div class="level-item">
-                                        <button onclick="location.href='/detail/{{ my_plan['plan_no'] }}'" class="button posting">댓글 보기</button>
                                     </div>
                                     <div class="level-item">
                                         <button onclick='$("#modal-modify").removeClass("is-active")' class="button">취소</button>
