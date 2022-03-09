@@ -29,8 +29,10 @@ def home():
         user_info = db.users.find_one({"username": payload["id"]})
         # 오늘 날짜에 해당하는 계획들을 데이터베이스에서 검색
         today_plans = db.plans.find({'today': datetime.now().strftime('%Y-%m-%d')})
+        # 오늘 날짜에 현재 접속한 유저가 업로드 한 계획만 따로 검색
+        my_plan = db.plans.find_one({'today': datetime.now().strftime('%Y-%m-%d'), 'username': user_info['username']})
         # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
-        return render_template('index.html', user_info=user_info, today_plans=today_plans)
+        return render_template('index.html', user_info=user_info, today_plans=today_plans, my_plan=my_plan)
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
@@ -226,8 +228,9 @@ def detail(plan_no):
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": payload["id"]})
+        today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
         # 사용자가 계획 클릭시 해당 계획 번호를 이용하여 포스트 정보 획득
-        user_post = db.plans.find_one({"plan_no": int(plan_no)})
+        user_post = db.plans.find_one({"plan_no": int(plan_no), 'today': today})
         # 세부 페이지를 돌려주며 사용자 정보, 포스팅 정보, 포스팅 번호를 함께 넘겨준다.
         return render_template('detail.html', user_info=user_info, user_post=user_post, plan_no=plan_no)
 
