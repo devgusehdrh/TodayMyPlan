@@ -218,17 +218,21 @@
 
             //댓글 삭제
             function delete_comment() {
-
+                const comment_no = $('#comment_no').val()
                 const uncomment = confirm('댓글을 정말 삭제 할까요?')
+                console.log(comment_no)
 
                 if (uncomment == true) {
                     $.ajax({
                         type: "POST",
                         url: `/detail/comment-delete`,
-                        data: { comment_no_give: {{ comments.comment_no }} },
+                        data: {
+                            comment_no_give: comment_no
+                        },
                         success: function (response) {
                             alert(response["msg"])
                             window.location.reload()
+
                         }
                     })
                 }

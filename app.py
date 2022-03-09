@@ -303,24 +303,23 @@ def save_comment():
 
 @app.route('/detail/comment-delete', methods=['POST'])
 def delete_comment():
-    # 토큰 가져오기
-    token_receive = request.cookies.get('mytoken')
+
     try:
-        # 토큰 복호화
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        # 복호화한 페이로드에서 사용자 아이디 획득
-        user_info = db.users.find_one({"username": payload["id"]})
+
         today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
-        comment_no_receive = request.form('comment_no_give')
+        comment_no = request.form['comment_no_give']
+        num = re.sub('[^0-9]', ' ', comment_no)
 
-        #날짜와 유저정보가 일치하는 댓글 데이터 삭제
-        db.comments.delete_one({'today': today, 'username': user_info['username'], 'comment_no': comment_no_receive})
+        print(comment_no)
 
-        # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
+        db.comments.delete_one({'today': today, 'comment_no': num})
+
+
         return jsonify({'result': 'success', 'msg': '댓글을 삭제 했어요.'})
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for('/'))
+
 
 
 
