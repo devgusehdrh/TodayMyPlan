@@ -139,13 +139,16 @@ def userInfo(id):
         # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": id}, {"_id": False})
 
-        # 오늘 날짜에 현재 접속한 유저가 업로드 한 계획만 따로 검색
-        my_plan = db.plans.find_one({'today': datetime.now().strftime('%Y-%m-%d'), 'username': user_info['username']})
+        if user_info != None:
 
-        status = (id == payload["id"])
+            # 오늘 날짜에 현재 접속한 유저가 업로드 한 계획만 따로 검색
+            my_plan = db.plans.find_one({'today': datetime.now().strftime('%Y-%m-%d'), 'username': user_info['username']})
 
-        # user 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
-        return render_template('user.html', user_info=user_info, status=status, my_plan=my_plan)
+            status = (id == payload["id"])
+
+            # user 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
+            return render_template('user.html', user_info=user_info, status=status, my_plan=my_plan)
+        return redirect(url_for("home"))
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
