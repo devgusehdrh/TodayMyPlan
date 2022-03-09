@@ -188,6 +188,31 @@ def delete_plan():
     except jwt.exceptions.DecodeError:
         return redirect(url_for('/'))
 
+# 오늘 계획 수정
+@app.route('/PUT/plan', methods=["PUT"])
+def put_plan():
+    # 토큰 가져오기
+    token_receive = request.cookies.get('mytoken')
+    # 토큰이 유효한 경우에만 아래 처리 실행
+    try:
+        # 토큰을 복호화
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 유저DB에서 토큰["id"]를 키로 유저검색
+        user_info = db.users.find_one({"username": payload["id"]})
+
+        my_plan_receive = request.form['myPlan_give']  # 계획
+        registration_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 등록시간 (초단위까지)
+        today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
+
+        # myPlan DB에 유저의 계획 변경
+        db.plans.update_one({'username': user_info['username'], 'today': today}, {'$set': {'my_plan': my_plan_receive, 'registration_time': registration_time}})
+
+        # json형태로 response 반환
+        return jsonify({'result': 'success', 'msg': '오늘의 계획을 수정 했어요!'})
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("/"))
+
 
 # 세부 페이지 계획 포스팅 인덱스별 접속
 @app.route('/detail/<plan_no>')
