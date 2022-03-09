@@ -28,8 +28,6 @@ def home():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": payload["id"]})
-        today_plans = db.plans.find({'today': datetime.now().strftime('%Y-%m-%d')})
-        return render_template('index.html', user_info=user_info, today_plans=today_plans)
         # 오늘 날짜에 해당하는 계획들을 데이터베이스에서 검색
         today_plans = db.plans.find({'today': datetime.now().strftime('%Y-%m-%d')})
         # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
@@ -56,11 +54,14 @@ def login():
 # 로그인
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
-    # 로그인
+    # 아이디
     username_receive = request.form['username_give']
+    # 패스워드
     password_receive = request.form['password_give']
 
+    # 패스워드 암호화(해시함수)
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    # 아이디, 패스워드 값을 이용하여 데이터베이스에서 검색
     result = db.users.find_one({'username': username_receive, 'password': pw_hash})
 
     # 아이디 및 패스워드 일치하는 사용자가 있을 경우
@@ -183,12 +184,8 @@ def detail(plan_no):
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": payload["id"]})
-        # 오늘 날짜의 포스트를 모두 찾는다.
-        today_all_plans = list(db.plans.find({'today': today}, {'_id': False}))
-        # 오늘 날짜 중에 인덱스 값이 동일한 값을 user_post에 넣는다.
-        for today_plan in today_all_plans:
-            if today_plan['plan_no'] == plan_no:
-                user_post = today_plan
+        # 오늘 날짜와 포스트 번호에 해당하는 포스트를 데이터 베이스에서 검색한다.
+        user_post = db.plans.find_one({'today': today, 'plan_no': plan_no})
 
         # 세부 페이지를 돌려주며 사용자 정보, 포스팅 정보, 포스팅 번호를 함께 넘겨준다.
         return render_template('detail.html', user_info=user_info, user_post=user_post, plan_no=plan_no)
