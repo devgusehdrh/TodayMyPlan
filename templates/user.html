@@ -38,15 +38,30 @@
 
                 </div>
             </div>
-            {%if  status %}
-            <div class="group-btn">
-                <button class="primary-btn" id="editBtn" onclick="showEditModal()">프로필 수정</button>
-                <button class="primary-btn" id="change-pw" onclick="showPwModal()">비밀번호 변경</button>
+            {% if  status %}
+                <div class="group-btn">
+                    <button class="primary-btn" id="editBtn" onclick="showEditModal()">프로필 수정</button>
+                    <button class="primary-btn" id="change-pw" onclick="showPwModal()">비밀번호 변경</button>
 
-            </div>
+                </div>
             {% endif %}
             <hr/>
+            <div class="mycards">
+                <div class="row row-cols-1 row-cols-md-4 g-4">
 
+                        <div class="col" onclick="location.href='/detail/{{ my_plan.plan_no }}'">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title plan">{{ my_plan.nickname }}님의 오늘 계획</h5>
+                                    <p class="card-text">{{ my_plan.my_plan }}</p>
+                                    <p id="plan_no" style="display:none">{{ my_plan.plan_no }}</p>
+                                    <p id="plan_day" style="display:none">{{ my_plan.today }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
         </header>
         <!--       프로필 수정 모달 -->
         <div id="edit-modal" class="modal-overlay">
@@ -59,7 +74,8 @@
                     <label class="label">닉네임</label>
                     <input id="edit-nickName" class="input" type="text" placeholder={{ user_info.nickname }}>
                     <label class="label">인사말</label>
-                    <textarea id="edit-greeting" class="textarea" placeholder={{ user_info.profile_greeting }}></textarea>
+                    <textarea id="edit-greeting" class="textarea"
+                              placeholder={{ user_info.profile_greeting }}></textarea>
 
                     <div class="file has-name is-left">
                         <label class="file-label">

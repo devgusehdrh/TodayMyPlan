@@ -191,3 +191,21 @@ img {
 .file-name{
     width: 16rem;
 }
+
+  .mycards {
+            margin: 20px auto 0px auto;
+            width: 95%;
+            max-width: 1200px;
+        }
+        .card-title.plan {
+            font-weight: bold;
+        }
+        .card-body:hover {
+            background-color: #effff6;
+            cursor: pointer;
+        }
+        .title.card-section {
+            font-size: 45px;
+            font-family: 'Gamja Flower', cursive;
+            font-family: 'Single Day', cursive;
+        }

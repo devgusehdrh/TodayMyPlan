@@ -1,3 +1,4 @@
+//파일 추가에 이벤트리스너 달아주기
 const fileInput = document.querySelector('.file-label input[type=file]');
 fileInput.onchange = (e) => {
     if (fileInput.files.length > 0) {
@@ -8,6 +9,7 @@ fileInput.onchange = (e) => {
 }
 
 
+//이미지 파일 읽기
 function readImage(input) {
     // 인풋 태그에 파일이 있는 경우
     if (input.files && input.files[0]) {
