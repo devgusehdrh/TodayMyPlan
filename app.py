@@ -13,8 +13,10 @@ import re
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+# 비밀키 설정
 SECRET_KEY = 'SPARTA'
 
+# 몽고DB 연결
 client = MongoClient('mongodb://127.0.0.1', 27017)
 db = client.todaymyplan
 
@@ -200,6 +202,95 @@ def detail(plan_no):
 @app.route('/detail')
 def detail_none():
     return home()
+
+# 계획 수정 가능 여부 확인 기능
+@app.route('/modify_chk/<plan_no>', methods=['POST'])
+def modify_chk(plan_no):
+    # 토큰 가져오기
+    token_receive = request.cookies.get('mytoken')
+    # plan_no에서 숫자만 남기고 다른 문자를 지운다
+    plan_no = int(re.sub('[^0-9]', ' ', plan_no).strip())
+    today = datetime.now().strftime('%Y-%m-%d')  # 등록시간 (년월일)
+    try:
+        # 토큰 복호화
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 복호화한 페이로드에서 사용자 아이디 획득
+        user_info = db.users.find_one({"username": payload["id"]})
+        # 오늘 날짜와 포스트 번호에 해당하는 포스트를 데이터 베이스에서 검색한다.
+        user_post = db.plans.find_one({'today': today, 'plan_no': plan_no})
+        # 접속자와 해당 계획의 작성자 동일 여부 확인
+        if user_post['username'] == user_info['username']:
+            # 같다면 수정 페이지로 이동
+            # json형태로 response 반환
+            return jsonify({'result': 'success'})
+        else:
+            # 다를 경우 오류 메시지 전송
+            msg = '계획을 수정할 권한이 없습니다'
+            # json형태로 response 반환
+            return jsonify({'result': 'fail', 'msg': msg})
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("detail.html", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("detail.html", msg="로그인 정보가 존재하지 않습니다."))
+
+# 계획 수정 기능(구현중)
+@app.route('/modify_plan/<plan_no>', methods=['POST'])
+def modify_plan(plan_no):
+    # 토큰 가져오기
+    token_receive = request.cookies.get('mytoken')
+    # plan_no에서 숫자만 남기고 다른 문자를 지운다
+    plan_no = int(re.sub('[^0-9]', ' ', plan_no).strip())
+    today = datetime.now().strftime('%Y-%m-%d')  # 등록시간 (년월일)
+    try:
+        # 토큰 복호화
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 복호화한 페이로드에서 사용자 아이디 획득
+        user_info = db.users.find_one({"username": payload["id"]})
+        # 오늘 날짜와 포스트 번호에 해당하는 포스트를 데이터 베이스에서 검색한다.
+        user_post = db.plans.find_one({'today': today, 'plan_no': plan_no})
+        # 접속자와 해당 계획의 작성자 동일 여부 확인
+        # json형태로 response 반환
+        return jsonify({'result': 'success'})
+
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("detail.html", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("detail.html", msg="로그인 정보가 존재하지 않습니다."))
+
+# 계획 삭제 기능
+@app.route('/delete_plan/<plan_no>', methods=['POST'])
+def delete_plan(plan_no):
+    # 토큰 가져오기
+    token_receive = request.cookies.get('mytoken')
+    # plan_no에서 숫자만 남기고 다른 문자를 지운다
+    plan_no = int(re.sub('[^0-9]', ' ', plan_no).strip())
+    today = datetime.now().strftime('%Y-%m-%d')  # 등록시간 (년월일)
+    try:
+        # 토큰 복호화
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 복호화한 페이로드에서 사용자 아이디 획득
+        user_info = db.users.find_one({"username": payload["id"]})
+        # 오늘 날짜와 포스트 번호에 해당하는 포스트를 데이터 베이스에서 검색한다.
+        user_post = db.plans.find_one({'today': today, 'plan_no': plan_no})
+        # 접속자와 해당 계획의 작성자 동일 여부 확인
+        if user_post['username'] == user_info['username']:
+            # 같다면 삭제
+            db.plans.delete_one({'today': today, 'plan_no': plan_no})
+            msg = '계획을 삭제했습니다'
+            # json형태로 response 반환
+            return jsonify({'result': 'success', 'msg': msg})
+        else:
+            # 다를 경우 오류 메시지 전송
+            msg = '계획을 삭제할 권한이 없습니다'
+            # json형태로 response 반환
+            return jsonify({'result': 'fail', 'msg': msg})
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("detail.html", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("detail.html", msg="로그인 정보가 존재하지 않습니다."))
 
 
 if __name__ == '__main__':

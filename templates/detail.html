@@ -1,166 +1,272 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
-
-        <!-- Webpage Title -->
+        <meta charset="UTF-8">
         <title>오늘 뭐하지?</title>
 
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Single+Day&display=swap" rel="stylesheet">
         <!-- Bulma CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-        <!-- Font Awesome CSS -->
-        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-        <!-- Bootstrap -->
+        <!-- BootStrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+              crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
                 crossorigin="anonymous"></script>
+        <!-- Font Awesome CSS -->
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
         <!-- JS -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    </head>
+    <style>
+        .logo {
+            font-weight: 800;
+            font-size: 3rem;
+            font-family: 'Gamja Flower', cursive;
+            font-family: 'Single Day', cursive;
+            color: #0bb068 !important;
+        }
+        .button.posting {
+            background-color: #0bb068;
+            border-color: transparent;
+            color: #fff !important;
+        }
+        .button.is-light.logout {
+            border-radius: 70px;
+            font-size: 12px;
+        }
+        .modal-content {
+            width: 600px;
+            max-width: 80%;
+        }
+        .mycards {
+            margin: 20px auto 0px auto;
+            width: 95%;
+            max-width: 1200px;
+        }
+        .card-title.plan {
+            font-weight: bold;
+        }
+        .card-body:hover {
+            background-color: #effff6;
+            cursor: pointer;
+        }
+        .is-outlined{
+            color: #fff !important;
+            background-color: #0bb068;
+            border-color: transparent;
+        }
 
-        <style>
-                .section {
-                padding: 1rem 1.5rem;
-                max-width: 750px;
-                margin: auto;
-                }
+        .title.card-section {
+            font-size: 45px;
+            font-family: 'Gamja Flower', cursive;
+            font-family: 'Single Day', cursive;
+        }
+        .today {
+            font-weight: bold;
+        }
 
-                .title {
-                font-weight: 800;
-                font-size: 5rem;
-                font-family: 'Gamja Flower', cursive;
-                font-family: 'Single Day', cursive;
-                }
-
-                .title.card-section {
-                    font-size: 45px;
-                    font-family: 'Gamja Flower', cursive;
-                    font-family: 'Single Day', cursive;
-                }
-
-                .subtitle {
-                font-size: 2rem;
-                }
-
-                .is-sparta {
+        .is-plan {
                 color: #0bb068 !important;
                 font-family: 'Gamja Flower', cursive;
 
                 }
-                .button.is-sparta {
-                    background-color: #0bb068;
-                    border-color: transparent;
-                    color: #fff !important;
+    </style>
+    <script>
+        function logout() {
+            $.removeCookie('mytoken');
+            alert('로그아웃')
+            window.location.href='/'
+        }
+
+        let plan_no = '{{ plan_no }}'
+        $(document).ready(function(){
+            show_plan();
+        });
+
+
+        {## 세부 목록 보기#}
+        function show_plan() {
+            $.ajax({
+                type: "get",
+                url: `/detail/${plan_no}`,
+                data: {},
+                success: function (response){
                 }
-
-                .button.is-sparta.is-outlined {
-                    background-color: transparent;
-                    border-color: #0bb068;
-                    color: #0bb068 !important;
-                }
-
-                .help {
-                    color: gray;
-                }
-
-                .btn-top {
-                    margin-top: 1rem;
-                    margin-right: 0.5rem;
-                }
-
-
-        </style>
-        <script>
-            let plan_no = '{{ plan_no }}'
-            $(document).ready(function(){
-                show_plan();
             });
+        }
+        function post() {
+            const myPlan = $('#textarea-post').val()
 
-
-            function logout() {
-                $.removeCookie('mytoken', {path: '/'});
-                alert('로그아웃')
-                window.location.href='/'
-            }
-
-            {## 세부 목록 보기#}
-            function show_plan() {
-                 $.ajax({
-                    type: "get",
-                    url: `/detail/${plan_no}"`,
-                    data: {},
-                    success: function (response){
+            $.ajax({
+                url: "/POST/plan",
+                type: "POST",
+                data: {'myPlan_give': myPlan},
+                success: function(response) {
+                    if(response['result'] == 'success'){
+                        alert(response['msg'])
+                        window.location.replace('/')
+                    } else {
+                        alert('에러 발생')
+                        window.location.replace('/')
                     }
-                });
-            }
+                }
+            });
+        }
 
-         </script>
+        function modify_chk() {
+            $.ajax({
+                url: `/modify_chk/${plan_no}`,
+                type: "POST",
+                data: {},
+                success: function(response) {
+                    if (response['result'] == 'success'){
+                        alert(response['msg'])
+                        modify_plan()
+                    } else {
+                        alert(response['msg'])
+                        window.location.replace(`/detail/${plan_no}`)
+                    }
+                }
+            });
+        }
 
-    </head>
+        function modify_plan() {
+            $.ajax({
+                url: `/modify_plan/${plan_no}`,
+                type: "POST",
+                data: {},
+                success: function(response) {
+                    if (response['result'] == 'success'){
+                        alert(response['msg'])
+                        window.location.replace(`/`)
+                    } else {
+                        alert(response['msg'])
+                        window.location.replace(`/detail/${plan_no}`)
+                    }
+                }
+            });
+        }
+
+        function delete_plan() {
+            $.ajax({
+                url: `/delete_plan/${plan_no}`,
+                type: "POST",
+                data: {},
+                success: function(response) {
+                    if (response['result'] == 'success'){
+                        alert(response['msg'])
+                        window.location.replace('/')
+                    } else {
+                        alert(response['msg'])
+                        window.location.replace(`/detail/${plan_no}`)
+                    }
+                }
+            });
+        }
+
+    </script>
     <body>
-    <div class="container">
+        <div class="container">
             <div class="row">
                 <div class="col-3">
-
-                </div>
-                <div class="col-6" style="margin:auto;">
                     <section class="hero is-white">
                         <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
-                            {#                타이틀 클릭시 로그인 페이지 리다이렉션#}
-                            <h1 class="title is-sparta" onclick='window.location.replace("/")'>오늘 뭐하지?</h1>
+                            <h1 class="logo" onclick='window.location.replace("/")' style="cursor:pointer;">오늘 뭐하지?</h1>
                         </div>
                     </section>
                 </div>
+                <div class="col-6" style="margin:auto;">
+                    <div class="field has-addons">
+                        <div class="control" style="width:100%">
+                            <form id="form_box1">
+                                <input id="input-username-modal" class="input" type="textarea"
+                                       placeholder="오늘의 계획을 입력해주세요!" onclick='$("#modal-post").addClass("is-active")'>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-2" style="margin:auto">
+                    {{ user_info['nickname'] }}님, 오늘도 화이팅!
                 </div>
                 <div class="col-1" style="margin:auto">
                     <button class="button is-light logout" onclick="logout()">로그아웃</button>
                 </div>
             </div>
         </div>
-    <section class="hero is-success">
-        <div class="hero-body">
-            <div class="container has-text-centered">
-                <p class="title card-section">
-                    "작은 것 하나라도 실천하는 습관을 길러봐요"
-                </p>
-                <p class="today">오늘은 <span id="date" class="tag is-white is-medium"></span> 입니다.</p>
-            </div>
-        </div>
-    </section>
-    <div class="mycards" style="padding:1rem">
-        <section class="hero is-white">
-            <div class="card text-center" style="margin:auto" >
-                <div class="card-header is-sparta text-center" style="font-size:2rem">
-                    {{ user_post['nickname'] }} 님의 오늘 계획입니다
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title" style="font-size: 1.5rem">{{ user_post['my_plan'] }}</h5>
+        <section class="hero is-success">
+            <div class="hero-body">
+                <div class="container has-text-centered">
+                    <p class="title card-section">
+                        "작은 것 하나라도 실천하는 습관을 길러봐요"
+                    </p>
+                    <p class="today">오늘은 <span id="date" class="tag is-white is-medium"></span> 입니다.</p>
                 </div>
             </div>
         </section>
-    </div>
-        <section class="hero is-white" id="plan">
+        <div class="mycards">
+            <section class="hero is-white">
+                <div class="card text-center" style="margin:auto" >
+                    <div class="card-header is-plan text-center" style="font-size:2rem">
+                        {{ user_post['nickname'] }} 님의 오늘 계획입니다
+                    </div>
+                    <div class="card-section" style="margin-top:1rem;margin-bottom: 1rem">
+                        <h5 class="card-title" style="font-size: 1.5rem">{{ user_post['my_plan'] }}</h5>
+                    </div>
+                    <section>
+                        <div style="float:right">
+                            <button class="is-outlined" style="margin-left:1px;margin-right:1px" onclick="modify_plan()">수정</button>
+                        </div>
+                        <div style="float:right">
+                            <button class="is-outlined" style="margin:auto" onclick="delete_plan()">삭제</button>
+                        </div>
+                    </section>
 
-        </section>
-         <section class="hero is-white">
-{#            댓글 입력창#}
-        </section>
-        <section class="hero is-white">
-{#            댓글 목록#}
-        </section>
+                </div>
+            </section>
+        </div>
+        <!-- 포스팅 박스 modal -->
+        <div class="modal" id="modal-post">
+            <div class="modal-background" onclick='$("#modal-post").removeClass("is-active")'></div>
+            <div class="modal-content">
+                <div class="box">
+                    <article class="media">
+                        <div class="media-content">
+                            <div class="field">
+                                <p class="control">
+                                        <textarea id="textarea-post" class="textarea"
+                                                  placeholder="오늘의 계획을 입력해주세요!"></textarea>
+                                </p>
+                            </div>
+                            <nav class="level is-mobile">
+                                <div class="level-left">
+                                </div>
+                                <div class="level-right">
+                                    <div class="level-item">
+                                        <button onclick="post()" class="button posting">포스팅하기</button>
+                                    </div>
+                                    <div class="level-item">
+                                        <button onclick='$("#modal-post").removeClass("is-active")' class="button">취소</button>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close"
+                    onclick='$("#modal-post").removeClass("is-active")'></button>
+        </div>
 
     </body>
     <script>
