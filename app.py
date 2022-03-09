@@ -9,11 +9,14 @@ from datetime import datetime, timedelta
 # 정규식 표현식 불러오기
 import re
 
+
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+# 비밀키 설정
 SECRET_KEY = 'SPARTA'
 
+# 몽고DB 연결
 client = MongoClient('mongodb://127.0.0.1', 27017)
 db = client.todaymyplan
 
@@ -55,11 +58,14 @@ def login():
 # 로그인
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
-    # 로그인
+    # 아이디
     username_receive = request.form['username_give']
+    # 패스워드
     password_receive = request.form['password_give']
 
+    # 패스워드 암호화(해시함수)
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    # 아이디, 패스워드 값을 이용하여 데이터베이스에서 검색
     result = db.users.find_one({'username': username_receive, 'password': pw_hash})
 
     # 아이디 및 패스워드 일치하는 사용자가 있을 경우
@@ -91,9 +97,9 @@ def sign_up():
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     # 데이터베이스에 저장
     doc = {
-        "username": username_receive,  # 아이디
-        "password": password_hash,  # 비밀번호
-        "nickname": nickname_receive,  # 닉네임
+        "username": username_receive,                               # 아이디
+        "password": password_hash,                                  # 비밀번호
+        "nickname": nickname_receive,                               # 닉네임
     }
     db.users.insert_one(doc)
     # 회원가입 성공 반환
@@ -129,7 +135,7 @@ def post_plan():
         # 유저DB에서 토큰["id"]를 키로 유저검색
         user_info = db.users.find_one({"username": payload["id"]})
 
-        my_plan_receive = request.form['myPlan_give']  # 계획
+        my_plan_receive = request.form['myPlan_give'] # 계획
         registration_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 등록시간 (초단위까지)
         today = datetime.now().strftime('%Y-%m-%d')  # 등록시간 (년월일)
 
@@ -163,32 +169,41 @@ def post_plan():
         # myPlan DB에 유저의 계획 등록
         db.plans.insert_one(doc)
         # json형태로 response 반환
-        return jsonify({'result': 'success', 'msg': '오늘의 계획을 등록 했어요!'})
+        return jsonify({'result': 'success', 'msg': '오늘의 계획이 등록되었습니다!'})
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for("/"))
 
-# 오늘 계획 삭제
-@app.route('/DELETE/plan', methods=['DELETE'])
-def delete_plan():
+
+# 세부 페이지 계획 포스팅 인덱스별 접속
+@app.route('/detail/<plan_no>')
+def detail(plan_no):
     # 토큰 가져오기
     token_receive = request.cookies.get('mytoken')
+    # plan_no에서 숫자만 남기고 다른 문자를 지운다
+    plan_no = int(re.sub('[^0-9]', ' ', plan_no).strip())
     try:
         # 토큰 복호화
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": payload["id"]})
-        today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
+        # 오늘 날짜와 포스트 번호에 해당하는 포스트를 데이터 베이스에서 검색한다.
+        user_plan = db.plans.find_one({'today': datetime.now().strftime('%Y-%m-%d'), 'plan_no': plan_no})
 
-        db.plans.delete_one({'today': today, 'username': user_info['username']})
 
-        # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
-        return jsonify({'result': 'success', 'msg': '계획을 삭제 했어요.'})
+        # 세부 페이지를 돌려주며 사용자 정보, 포스팅 정보, 포스팅 번호를 함께 넘겨준다.
+        return render_template('detail.html', user_info=user_info, user_plan=user_plan, plan_no=plan_no)
 
     except jwt.ExpiredSignatureError:
-        return redirect(url_for('/'))
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
-        return redirect(url_for('/'))
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
+
+# 세부 페이지에 인덱스 없이 접속할 경우 home() 함수를 호출
+@app.route('/detail')
+def detail_none():
+    return home()
 
 # 오늘 계획 수정
 @app.route('/PUT/plan', methods=["PUT"])
@@ -215,36 +230,27 @@ def put_plan():
     except jwt.ExpiredSignatureError:
         return redirect(url_for("/"))
 
-
-# 세부 페이지 계획 포스팅 인덱스별 접속
-@app.route('/detail/<plan_no>')
-def detail(plan_no):
+# 오늘 계획 삭제
+@app.route('/DELETE/plan', methods=['DELETE'])
+def delete_plan():
     # 토큰 가져오기
     token_receive = request.cookies.get('mytoken')
-    # plan_no에서 숫자만 남기고 다른 문자를 지운다
-    plan_no = re.sub('[^0-9]', ' ', plan_no).strip()
     try:
         # 토큰 복호화
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": payload["id"]})
         today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
-        # 사용자가 계획 클릭시 해당 계획 번호를 이용하여 포스트 정보 획득
-        user_post = db.plans.find_one({"plan_no": int(plan_no), 'today': today})
-        # 세부 페이지를 돌려주며 사용자 정보, 포스팅 정보, 포스팅 번호를 함께 넘겨준다.
-        return render_template('detail.html', user_info=user_info, user_post=user_post, plan_no=plan_no)
+
+        db.plans.delete_one({'today': today, 'username': user_info['username']})
+
+        # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
+        return jsonify({'result': 'success', 'msg': '계획을 삭제 했어요.'})
 
     except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+        return redirect(url_for('/'))
     except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
-
-
-# 세부 페이지에 인덱스 없이 접속할 경우 home() 함수를 호출
-@app.route('/detail')
-def detail_none():
-    return home()
-
+        return redirect(url_for('/'))
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
