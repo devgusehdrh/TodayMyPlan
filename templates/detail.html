@@ -21,9 +21,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
                 crossorigin="anonymous"></script>
-        <!-- Font Awesome CSS -->
-        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
+        <!-- Font Awesome 5 CSS -->
+        <script src="https://kit.fontawesome.com/a4e4ec2ef7.js" crossorigin="anonymous"></script>
         <!-- JS -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
@@ -58,13 +57,6 @@
             width: 95%;
             max-width: 1200px;
         }
-        .card-title.plan {
-            font-weight: bold;
-        }
-        .card-body:hover {
-            background-color: #effff6;
-            cursor: pointer;
-        }
         .title.card-section {
             font-size: 45px;
             font-family: 'Gamja Flower', cursive;
@@ -72,6 +64,26 @@
         }
         .today {
             font-weight: bold;
+        }
+        .message-header p {
+            margin: auto;
+        }
+        .message:hover {
+            box-shadow: 1px 1px 20px #ddd;
+        }
+        .message-body:hover {
+            cursor: pointer;
+        }
+        .button.is-rounded.is-small {
+            background-color: #fffbeb;
+            border-color: #fffbeb;
+            margin-right: 5px;
+            font-size: 10px;
+        }
+        .button.is-rounded.is-small:hover {
+            background-color: #4c421a;
+            border-color: #80511a;
+            color: #ffffff;
         }
     </style>
     <script>
@@ -244,32 +256,23 @@
         </section>
         <div class="mycards">
 
-            <section class="hero is-white">
-                <div class="card text-center" style="margin:auto" >
-                    <div class="card-header is-plan text-center" style="font-size:2rem; font-weight: bold">
-                        {{ user_plan['nickname'] }} 님의 오늘 계획입니다
+                {#포스팅 목록 확인#}
+                    <div class="col">
+                        <article class="message is-info">
+                            <div class="message-header">
+                                <i class="fa-solid fa-comment-dots" style="float:center"></i>
+                                <p class="is-centered" style="font-size:22px">{{ user_plan.nickname }} 님의 오늘 계획입니다.</p>
+                                {% if user_plan['username'] == user_info['username'] %}
+                                    <button onclick='$("#modal-modify").addClass("is-active")' class="button is-rounded is-small">수정</button>
+                                    <button class="delete" aria-label="delete" onclick="mypost_delete()"></button>
+                                {% endif %}
+                            </div>
+                            <div class="message-body" onclick="location.href='/detail/{{ user_plan.plan_no }}'">
+                                {{ user_plan.my_plan }}
+                            </div>
+                        </article>
                     </div>
 
-                    <div class="card-section" style="margin-top:1rem;margin-bottom: 1rem">
-                        <h5 class="card-title" style="font-size: 1.5rem">{{ user_plan['my_plan'] }}</h5>
-                    </div>
-                    <section>
-                    <div class="level-right">
-                        <div class style="float:right">
-                            {% if user_plan['username'] == user_info['username'] %}
-                            <button class="button posting" style="margin-left:0.5rem;margin-right:0.5rem;margin-bottom:0.3rem" onclick='$("#modal-modify").addClass("is-active")'>수정</button>
-                            {% endif %}
-                        </div>
-                        <div style="float:right">
-                            {% if user_plan['username'] == user_info['username'] %}
-                            <button class="button posting" style="margin-right:0.5rem;margin-bottom:0.3rem" onclick="mypost_delete()">삭제</button>
-                            {% endif %}
-                        </div>
-                    </div>
-                    </section>
-
-                </div>
-            </section>
         </div>
         <!-- 포스팅 박스 modal -->
         <div class="modal" id="modal-post">
