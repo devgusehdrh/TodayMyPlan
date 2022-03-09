@@ -85,6 +85,21 @@
             border-color: #80511a;
             color: #ffffff;
         }
+        .profile_view {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 70%;
+            float: right;
+            overflow: hidden;
+        }
+        .nickname-greeting {
+            font-size:15px;
+        }
     </style>
     <script>
         // 로그아웃
@@ -168,7 +183,7 @@
                         </div>
                     </section>
                 </div>
-                <div class="col-5" style="margin:auto;">
+                <div class="col-4" style="margin:auto;">
                     <div class="field has-addons">
                         <div class="control" style="width:100%">
                             <form id="form_box1">
@@ -178,8 +193,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-1" style="margin:auto">
+                    <div class="profile-box">
+                        <img class="profile_view" src="/static/img/profile/{{ user_info['profile_pic_real'] }}">
+                    </div>
+                </div>
                 <div class="col-2" style="margin:auto">
-                    {{ user_info['nickname'] }}님, 오늘도 화이팅!
+                    <div class="nickname-greeting">
+                        <strong>{{ user_info['nickname'] }}</strong> 님<br>오늘도 화이팅!
+                    </div>
                 </div>
                 <div class="col-1" style="margin:auto">
                     <button class="button is-success is-outlined edit" onclick="goUserInfo()">회원정보</button>
