@@ -20,7 +20,7 @@ main {
 
 .primary-btn {
     height: 2.5rem;
-   padding-bottom: calc(0.5em - 1px);
+    padding-bottom: calc(0.5em - 1px);
     padding-left: calc(0.75em - 1px);
     padding-right: calc(0.75em - 1px);
     padding-top: calc(0.5em - 1px);
@@ -35,7 +35,7 @@ main {
 
     cursor: pointer;
     background: #0bb068;
-    color:whitesmoke;
+    color: whitesmoke;
 }
 
 header {
@@ -130,6 +130,7 @@ img {
 
     padding: 10px;
 }
+
 .modal-window-pw {
 
     background: rgba(255, 255, 255);
@@ -144,6 +145,7 @@ img {
 
     padding: 10px;
 }
+
 .title {
     padding-left: 10px;
     display: inline;
@@ -170,42 +172,50 @@ img {
     padding: 0px 10px;
 
 }
-.modal-overlay label{
+
+.modal-overlay label {
     margin-top: 1rem;
 }
-.button-edit{
+
+.button-edit {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 
 }
-.button-edit>img{
+
+.button-edit > img {
     margin-top: 2rem;
 
 }
-.button-edit>button{
+
+.button-edit > button {
     margin-top: 2rem;
 
 }
-.file-name{
+
+.file-name {
     width: 16rem;
 }
 
-  .mycards {
-            margin: 20px auto 0px auto;
-            width: 95%;
-            max-width: 1200px;
-        }
-        .card-title.plan {
-            font-weight: bold;
-        }
-        .card-body:hover {
-            background-color: #effff6;
-            cursor: pointer;
-        }
-        .title.card-section {
-            font-size: 45px;
-            font-family: 'Gamja Flower', cursive;
-            font-family: 'Single Day', cursive;
-        }
+.mycards {
+    margin: 20px auto 0px auto;
+    width: 95%;
+    max-width: 1200px;
+}
+
+.card-title.plan {
+    font-weight: bold;
+}
+
+.card-body:hover {
+    background-color: #effff6;
+    cursor: pointer;
+}
+
+.title.card-section {
+    font-size: 45px;
+    font-family: 'Gamja Flower', cursive;
+    font-family: 'Single Day', cursive;
+}

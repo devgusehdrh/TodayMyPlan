@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 # 정규식 표현식 불러오기
 import re
 
-
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
@@ -98,11 +97,11 @@ def sign_up():
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     # 데이터베이스에 저장
     doc = {
-        "username": username_receive,                               # 아이디
-        "password": password_hash,                                  # 비밀번호
-        "nickname": nickname_receive,                               # 닉네임
-        'profile_greeting': "",                                     # 기본 인사말
-        "profile_pic_real": '유튜브_기본프로필_파랑.jpg'                  # 프로필 이미지 경로
+        "username": username_receive,  # 아이디
+        "password": password_hash,  # 비밀번호
+        "nickname": nickname_receive,  # 닉네임
+        'profile_greeting': "",  # 기본 인사말
+        "profile_pic_real": '유튜브_기본프로필_파랑.jpg'  # 프로필 이미지 경로
 
     }
     db.users.insert_one(doc)
@@ -126,7 +125,8 @@ def check_dup_nick():
     exists = bool(db.users.find_one({"nickname": nickname_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
-#프로필 페이지
+
+# 프로필 페이지
 @app.route('/userinfo/<id>')
 def getUser(id):
     # 토큰 가져오기
@@ -150,6 +150,7 @@ def getUser(id):
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
+
 # 오늘 나의 계획을 등록하는 API입니다. (메인 페이지의 ajax가 콜합니다.)
 @app.route('/POST/plan', methods=['POST'])
 def post_plan():
@@ -162,7 +163,7 @@ def post_plan():
         # 유저DB에서 토큰["id"]를 키로 유저검색
         user_info = db.users.find_one({"username": payload["id"]})
 
-        my_plan_receive = request.form['myPlan_give'] # 계획
+        my_plan_receive = request.form['myPlan_give']  # 계획
         registration_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 등록시간 (초단위까지)
         today = datetime.now().strftime('%Y-%m-%d')  # 등록시간 (년월일)
 
@@ -217,7 +218,6 @@ def detail(plan_no):
         # 오늘 날짜와 포스트 번호에 해당하는 포스트를 데이터 베이스에서 검색한다.
         user_plan = db.plans.find_one({'today': datetime.now().strftime('%Y-%m-%d'), 'plan_no': plan_no})
 
-
         # 세부 페이지를 돌려주며 사용자 정보, 포스팅 정보, 포스팅 번호를 함께 넘겨준다.
         return render_template('detail.html', user_info=user_info, user_plan=user_plan, plan_no=plan_no)
 
@@ -231,6 +231,7 @@ def detail(plan_no):
 @app.route('/detail')
 def detail_none():
     return home()
+
 
 # 오늘 계획 수정
 @app.route('/PUT/plan', methods=["PUT"])
@@ -249,13 +250,15 @@ def put_plan():
         today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
 
         # myPlan DB에 유저의 계획 변경
-        db.plans.update_one({'username': user_info['username'], 'today': today}, {'$set': {'my_plan': my_plan_receive, 'registration_time': registration_time}})
+        db.plans.update_one({'username': user_info['username'], 'today': today},
+                            {'$set': {'my_plan': my_plan_receive, 'registration_time': registration_time}})
 
         # json형태로 response 반환
         return jsonify({'result': 'success', 'msg': '오늘의 계획을 수정 했어요!'})
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for("/"))
+
 
 # 오늘 계획 삭제
 @app.route('/DELETE/plan', methods=['DELETE'])
@@ -278,6 +281,7 @@ def delete_plan():
         return redirect(url_for('/'))
     except jwt.exceptions.DecodeError:
         return redirect(url_for('/'))
+
 
 # 프로필 변경
 @app.route("/editInfo", methods=["POST"])
@@ -307,6 +311,8 @@ def editProfile():
         return jsonify({"result": "success", 'msg': '프로필을 업데이트했습니다.'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
+
 # 비밀번호 변경
 @app.route("/editPw", methods=["POST"])
 def changePw():
@@ -323,5 +329,7 @@ def changePw():
         return jsonify({"result": "success", 'msg': '비밀번호 변경 완료했습니다.'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
