@@ -91,7 +91,7 @@
         function show_plan() {
             $.ajax({
                 type: "get",
-                url: `/detail/${plan_no}`,
+                url: `/detail/{{plan_no}}`,
                 data: {},
                 success: function (response){
                 }
@@ -154,6 +154,42 @@
                 }
             })
         }
+        //오늘 댓글 저장
+             function save_comment() {
+                let Mycomment = $('#comment').val()
+
+                 $.ajax({
+                    type: "POST",
+                    url: `/detail/comment-registration`,
+                    data: { comment_give: Mycomment,
+                            plan_no_give: {{ plan_no }}
+                    },
+                    success: function (response) {
+                        alert(response["msg"])
+                        window.location.reload()
+
+                    }
+                });
+            }
+
+            //댓글 삭제
+            function delete_comment() {
+                const uncomment = confirm('댓글을 정말 삭제 할까요?')
+
+                if (uncomment == true) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: `/detail/comment-delete`,
+                        data: {},
+                        success: function (response) {
+                            alert(response["msg"])
+                            window.location.reload()
+
+                        }
+                    })
+                }
+            }
+
 
 
     </script>
@@ -290,6 +326,44 @@
             <button class="modal-close is-large" aria-label="close"
                     onclick='$("#modal-modify").removeClass("is-active")'></button>
         </div>
+        {# 댓글 남기기 #}
+        <div class="mypost">
+            <div class="form-floating">
+                    <textarea class="form-control" placeholder="댓글을 남겨주세요" id="comment"
+                              style="height: 100px"></textarea>
+                <label for="floatingTextarea2">댓글을 남겨주세요</label>
+            </div>
+            <button onclick="save_comment()" type="button" class="button comment">댓글 남기기</button>
+        </div>
+        <div>
+            {% for comment in comments %}
+                {% if comment.plan_no == plan_no %}
+                    <div class="mycards" id="comment-list">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title"> {{ comment.nickname }}님의 댓글입니다.</h5>
+                                    <p class="card-text"> {{ comment.comment }} </p>
+                                    <p id="comment_time"> {{ comment.registraion_time }} </p>
+                                    <p id="plan_no" style="display:none"> {{ comment.plan_no }} </p>
+                                    <p id="comment_no" style="display:none"> {{ comment.comment_no }} </p>
+                                </div>
+                                <div>
+                                    {# 로그인 유저 id와 댓글 작성 유저 id가 동일할 시 수정, 삭제 버튼 표시 #}
+                                    {% if comment.nickname == user_info.nickname %}
+                                        <button onclick="modify_comment()" type="button" class="button del">수정
+                                        </button>
+                                        <button onclick="delete_comment()" type="button" class="button del">삭제
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
 
     </body>
     <script>
