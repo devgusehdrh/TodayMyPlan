@@ -236,7 +236,7 @@ def detail(plan_no):
         # 사용자가 계획 클릭시 해당 계획 번호를 이용하여 포스트 정보 획득
         user_plan = db.plans.find_one({"plan_no": int(plan_no)})
         # 오늘 날짜의 댓글 입력 닉네임과 코멘트, 페이지 넘버 획득
-        comments = list(db.comments.find({'today': datetime.now().strftime('%Y-%m-%d')}, {'_id': False}))
+        comments = list(db.comments[plan_no].find({'today': datetime.now().strftime('%Y-%m-%d')}, {'_id': False}))
 
         # 세부 페이지를 돌려주며 사용자 정보, 포스팅 정보, 포스팅 번호, 댓글 정보를 함께 넘겨준다.
         return render_template('detail.html', user_info=user_info, user_plan=user_plan, plan_no=plan_no, comments=comments)
@@ -265,10 +265,13 @@ def save_comment():
 
         registration_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 등록시간 (초단위까지)
         today = datetime.now().strftime('%Y-%m-%d')  # 등록시간 (년월일)
+        plan_no_receive = request.form['plan_no_give']
+
 
         # [코멘트 고유번호 부여]
         # plans DB에서 오늘 날짜로 등록된 전체 데이터 조회
-        today_all_comments = list(db.comments.find({'today': today}, {'_id': False}))
+        today_all_comments = list(db.comments[plan_no_receive].find({'today': today}, {'_id': False}))
+
 
         # 오늘 등록된 댓글이 하나도 없는 경우
         if len(today_all_comments) == 0:
@@ -282,18 +285,18 @@ def save_comment():
             comment_no = last_comment['comment_no'] + 1
 
         comment_receive = request.form['comment_give']
-        plan_no_receive = request.form['plan_no_give']
 
         doc = {
             'nickname': user_info['nickname'],
             'username': user_info['username'],
-            'comment': comment_receive,
             'plan_no': plan_no_receive,
+            'comment': comment_receive,
             'comment_no': comment_no,
             'today': today,
             'registration_time': registration_time
         }
-        db.comments.insert_one(doc)
+
+        db.comments[plan_no_receive].insert_one(doc)
 
         return jsonify({'result': 'success', 'msg': '댓글을 등록 하였습니다!'})
 
@@ -305,15 +308,13 @@ def save_comment():
 def delete_comment():
 
     try:
-
         today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
         comment_no = request.form['comment_no_give']
-        num = re.sub('[^0-9]', ' ', comment_no)
+        num = re.sub('[^0-9]', ' ', comment_no).strip()
 
-        print(comment_no)
+        plan_no_receive = request.form['plan_no_give']
 
-        db.comments.delete_one({'today': today, 'comment_no': num})
-
+        db.comments[plan_no_receive].delete_one({'today': today, 'comment_no': num})
 
         return jsonify({'result': 'success', 'msg': '댓글을 삭제 했어요.'})
 
