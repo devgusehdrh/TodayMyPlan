@@ -91,22 +91,19 @@ function onChangePw() {
     const pw = document.getElementById("help-password")
     const chkPw = document.getElementById("help-password2")
 
-    // if (pw.classList.contains("is-success") && chkPw.classList.contains("is-success")) {
-    const password = document.getElementById("pw").value
-    $.ajax({
-        type: 'POST',
-        url: '/editPw',
-        data: {password: password},
-        success: function (response) {
-            closePwModal()
+    if (pw.classList.contains("is-success") && chkPw.classList.contains("is-success")) {
+        const password = document.getElementById("pw").value
+        $.ajax({
+            type: 'POST',
+            url: '/editPw',
+            data: {password: password},
+            success: function (response) {
+                closePwModal()
                 location.reload()
 
-        }
-    });
-
-
-    // }
-
+            }
+        });
+    }
 }
 
 //확인 비번 입력검증
@@ -149,3 +146,42 @@ function is_password(asValue) {
     var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
     return regExp.test(asValue);
 }
+
+// 오늘 포스팅 한 플랜 삭제
+function mypost_delete() {
+    const unpost = confirm('오늘 계획을 정말 삭제 할까요?')
+    if (unpost == true) {
+        $.ajax({
+            url: "/DELETE/plan",
+            type: "DELETE",
+            data: {},
+            success: function (response) {
+                if (response['result'] == 'success') {
+                    alert(response['msg'])
+                    window.location.reload()
+                } else {
+                    window.location.replace('/')
+                }
+            }
+        })
+    }
+}
+
+// 오늘 포스팅 한 플랜 수정
+        function mypost_modify() {
+            const myPlan = $('#textarea-modify').val()
+
+            $.ajax({
+                url: "/PUT/plan",
+                type: "PUT",
+                data: {'myPlan_give': myPlan},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert(response['msg'])
+                        window.location.reload()
+                    } else {
+                        window.location.replace('/')
+                    }
+                }
+            })
+        }

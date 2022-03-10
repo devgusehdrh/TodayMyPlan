@@ -140,6 +140,7 @@ def userInfo(id):
         user_info = db.users.find_one({"username": id}, {"_id": False})
 
         if user_info != None:
+            # myPlan DB에 유저의 계획 변경
 
             # 오늘 날짜에 현재 접속한 유저가 업로드 한 계획만 따로 검색
             my_plan = db.plans.find_one({'today': datetime.now().strftime('%Y-%m-%d'), 'username': user_info['username']})
@@ -249,6 +250,9 @@ def editProfile():
         nickName = request.form["nickName"]
         greeting = request.form["greeting"]
 
+        registration_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 등록시간 (초단위까지)
+        today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
+
         new_doc = {
             "nickname": nickName,
             "profile_greeting": greeting
@@ -264,6 +268,8 @@ def editProfile():
             new_doc["profile_pic_real"] = file_path
 
         db.users.update_one({'username': payload['id']}, {'$set': new_doc})
+        db.plans.update_one({'username': payload['id'], 'today': today},
+                            {'$set': {'nickname': nickName, 'registration_time': registration_time}})
         return jsonify({"result": "success", 'msg': '프로필을 업데이트했습니다.'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))

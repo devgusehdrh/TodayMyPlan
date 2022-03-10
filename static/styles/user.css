@@ -1,9 +1,16 @@
+
 a:hover {
     text-decoration: inherit;
     color: currentColor;
 
 }
-
+.logo {
+            font-weight: 800;
+            font-size: 3rem;
+            font-family: 'Gamja Flower', cursive;
+            font-family: 'Single Day', cursive;
+            color: #0bb068 !important;
+        }
 .header_nav {
     width: calc(100% - 2rem);
     display: flex;
