@@ -276,8 +276,6 @@
     }
 
 
-
-
 </script>
 <body>
 <div class="container">
@@ -414,14 +412,14 @@
 
                                     <div>
 
-                                    <button onclick='$("#modal-comment-modify{{ comment.comment_no }}").addClass("is-active")'
-                                            class="button del" href="{{ comment.comment_no }}">수정
-                                    </button>
-                                    <button onclick="delete_comment(this)" type="button"
-                                            class="button del">삭제
-                                    </button>
+                                        <button onclick='$("#modal-comment-modify{{ comment.comment_no }}").addClass("is-active")'
+                                                class="button del" href="{{ comment.comment_no }}">수정
+                                        </button>
+                                        <button onclick="delete_comment(this)" type="button"
+                                                class="button del">삭제
+                                        </button>
+                                    </div>
                                 {% endif %}
-                                </div>
                             </div>
                         </div>
                     </div>
