@@ -349,7 +349,6 @@ def detail(plan_no):
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
-
 @app.route('/detail/comment-registration', methods=['POST'])
 def save_comment():
     # 토큰 가져오기
@@ -364,9 +363,12 @@ def save_comment():
         registration_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 등록시간 (초단위까지)
         today = datetime.now().strftime('%Y-%m-%d')  # 등록시간 (년월일)
 
+        plan_no_receive = request.form['plan_no_give']
+
         # [코멘트 고유번호 부여]
         # plans DB에서 오늘 날짜로 등록된 전체 데이터 조회
-        today_all_comments = list(db.comments.find({'today': today}, {'_id': False}))
+        today_all_comments = list(db.comments.find({'today': today, 'plan_no': plan_no_receive}, {'_id': False}))
+
 
         # 오늘 등록된 댓글이 하나도 없는 경우
         if len(today_all_comments) == 0:
@@ -379,18 +381,19 @@ def save_comment():
             # 최근 등록된 댓글 번호에 1을 더해 플랜 번호 부여
             comment_no = last_comment['comment_no'] + 1
 
+
         comment_receive = request.form['comment_give']
-        plan_no_receive = request.form['plan_no_give']
 
         doc = {
             'nickname': user_info['nickname'],
             'username': user_info['username'],
-            'comment': comment_receive,
             'plan_no': plan_no_receive,
+            'comment': comment_receive,
             'comment_no': comment_no,
             'today': today,
             'registration_time': registration_time
         }
+
         db.comments.insert_one(doc)
 
         return jsonify({'result': 'success', 'msg': '댓글을 등록 하였습니다!'})
@@ -399,26 +402,23 @@ def save_comment():
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
 
 
-@app.route('/detail/comment-delete', methods=['DELETE'])
+@app.route('/detail/comment-delete', methods=['POST'])
 def delete_comment():
-    # 토큰 가져오기
-    token_receive = request.cookies.get('mytoken')
+
     try:
-        # 토큰 복호화
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        # 복호화한 페이로드에서 사용자 아이디 획득
-        user_info = db.users.find_one({"username": payload["id"]})
         today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
-        plan_no = db.comments.find_one({'username': user_info['username']})
+        comment_no = request.form['comment_no_give']
+        num = int(re.sub('[^0-9]', ' ', comment_no).strip())
 
-        # 날짜와 유저정보가 일치하는 댓글 데이터 삭제
-        db.comments.delete_one({'today': today, 'username': user_info['username'], 'plan_no': plan_no['plan_no']})
+        plan_no_receive = request.form['plan_no_give']
 
-        # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
+        db.comments.delete_one({'today': today, 'plan_no': plan_no_receive, 'comment_no': num})
+
         return jsonify({'result': 'success', 'msg': '댓글을 삭제 했어요.'})
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for('/'))
+
 
 
 if __name__ == '__main__':
