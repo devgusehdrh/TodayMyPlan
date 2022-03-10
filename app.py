@@ -128,7 +128,7 @@ def check_dup_nick():
 
 # 프로필 페이지
 @app.route('/userinfo/<id>')
-def getUser(id):
+def userInfo(id):
     # 토큰 가져오기
     token_receive = request.cookies.get('mytoken')
 
@@ -139,14 +139,16 @@ def getUser(id):
         # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": id}, {"_id": False})
 
-        # 오늘 날짜에 현재 접속한 유저가 업로드 한 계획만 따로 검색
-        my_plan = db.plans.find_one({'today': datetime.now().strftime('%Y-%m-%d'), 'username': user_info['username']})
+        if user_info != None:
 
-        status = (id == payload["id"])
+            # 오늘 날짜에 현재 접속한 유저가 업로드 한 계획만 따로 검색
+            my_plan = db.plans.find_one({'today': datetime.now().strftime('%Y-%m-%d'), 'username': user_info['username']})
 
-        # user 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
-        return render_template('user.html', user_info=user_info, status=status, my_plan=my_plan)
-    # return render_template('user.html')
+            status = (id == payload["id"])
+
+            # user 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
+            return render_template('user.html', user_info=user_info, status=status, my_plan=my_plan)
+        return redirect(url_for("home"))
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
@@ -202,6 +204,7 @@ def post_plan():
     except jwt.ExpiredSignatureError:
         return redirect(url_for("/"))
 
+
 # 세부 페이지에 인덱스 없이 접속할 경우 home() 함수를 호출
 @app.route('/detail')
 def detail_none():
@@ -234,6 +237,7 @@ def delete_plan():
         return redirect(url_for('/'))
     except jwt.exceptions.DecodeError:
         return redirect(url_for('/'))
+
 
 # 프로필 변경
 @app.route("/editInfo", methods=["POST"])
@@ -281,6 +285,8 @@ def changePw():
         return jsonify({"result": "success", 'msg': '비밀번호 변경 완료했습니다.'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
+
 # 오늘 계획 수정
 @app.route('/PUT/plan', methods=["PUT"])
 def put_plan():
@@ -298,7 +304,8 @@ def put_plan():
         today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
 
         # myPlan DB에 유저의 계획 변경
-        db.plans.update_one({'username': user_info['username'], 'today': today}, {'$set': {'my_plan': my_plan_receive, 'registration_time': registration_time}})
+        db.plans.update_one({'username': user_info['username'], 'today': today},
+                            {'$set': {'my_plan': my_plan_receive, 'registration_time': registration_time}})
 
         # json형태로 response 반환
         return jsonify({'result': 'success', 'msg': '오늘의 계획을 수정 했어요!'})
@@ -320,6 +327,7 @@ def detail(plan_no):
         # 복호화한 페이로드에서 사용자 아이디 획득
         user_info = db.users.find_one({"username": payload["id"]})
         # 사용자가 계획 클릭시 해당 계획 번호를 이용하여 포스트 정보 획득
+
         user_plan = db.plans.find_one({'today': datetime.now().strftime('%Y-%m-%d'),"plan_no": int(plan_no)},{'_id':False})
 
         # 오늘 날짜의 댓글 입력 닉네임과 코멘트, 페이지 넘버 획득
@@ -327,7 +335,8 @@ def detail(plan_no):
 
 
         # 세부 페이지를 돌려주며 사용자 정보, 포스팅 정보, 포스팅 번호, 댓글 정보를 함께 넘겨준다.
-        return render_template('detail.html', user_info=user_info, user_plan=user_plan, plan_no=plan_no, comments=comments)
+        return render_template('detail.html', user_info=user_info, user_plan=user_plan, plan_no=plan_no,
+                               comments=comments)
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
@@ -396,7 +405,7 @@ def delete_comment():
         today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
         plan_no = db.comments.find_one({'username': user_info['username']})
 
-        #날짜와 유저정보가 일치하는 댓글 데이터 삭제
+        # 날짜와 유저정보가 일치하는 댓글 데이터 삭제
         db.comments.delete_one({'today': today, 'username': user_info['username'], 'plan_no': plan_no['plan_no']})
 
         # 메인 페이지를 돌려주며 사용자 정보, 오늘 날짜에 해당하는 계획들을 함께 넘겨준다.
@@ -404,7 +413,6 @@ def delete_comment():
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for('/'))
-
 
 
 if __name__ == '__main__':

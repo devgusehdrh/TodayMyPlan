@@ -239,3 +239,8 @@ img {
     border-color: #80511a;
     color: #ffffff;
 }
+
+.modal-content {
+    width: 600px;
+    max-width: 80%;
+}
