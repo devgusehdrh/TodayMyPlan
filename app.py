@@ -407,14 +407,37 @@ def delete_comment():
 
     try:
         today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
-        comment_no = request.form['comment_no_give']
+        comment_no = request.form['comment_no_give'] # comment number
         num = int(re.sub('[^0-9]', ' ', comment_no).strip())
 
-        plan_no_receive = request.form['plan_no_give']
+        plan_no_receive = request.form['plan_no_give'] #페이지 number
 
-        db.comments.delete_one({'today': today, 'plan_no': plan_no_receive, 'comment_no': num})
+        # 오늘 만들어진 불러온 페이지 넘버와 댓글 넘버 일치하는 데이터 삭제, 수정과 삭제 버튼은 작성 유저만 보이도록 설정했음.
+        db.comments.delete_one({'today': today, 'plan_no': plan_no_receive, 'comment_no': num}) 
 
         return jsonify({'result': 'success', 'msg': '댓글을 삭제 했어요.'})
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for('/'))
+
+
+@app.route('/detail/comment-modify', methods=['PUT'])
+def modify_comment():
+
+    try:
+        today = datetime.now().strftime('%Y-%m-%d')  # 오늘 날짜
+        registration_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # 등록시간 (초단위까지)
+        comment_no_receive = request.form['comment_no_give']
+        comment_no = int(re.sub('[^0-9]', ' ', comment_no_receive).strip()) #댓글 넘버
+        modcomment = request.form['modcomment_give'] #수정한 댓글
+
+        plan_no_receive = request.form['plan_no_give'] #페이지 넘버
+
+        #오늘 만들어진 불러온 페이지 넘버와 댓글 넘버 일치하는 데이터 수정
+        db.comments.update_one({'today': today, 'comment_no': comment_no, 'plan_no': plan_no_receive},
+                               {'$set': {'comment': modcomment, 'registration_time': registration_time}})
+
+        return jsonify({'result': 'success', 'msg': '댓글을 수정 했어요.'})
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for('/'))

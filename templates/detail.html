@@ -231,6 +231,7 @@
 
     //댓글 삭제
     function delete_comment(target) {
+        //delete_comment()함수를 불러오는 버튼을 타겟으로 그 부모, 부모 div의 id값 호출
         const comment_no = $(target).parent().parent().attr("id");
         const uncomment = confirm('댓글을 정말 삭제 할까요?')
         if (uncomment == true) {
@@ -245,6 +246,36 @@
             })
         }
     }
+
+    //댓글 수정
+    function modify_comment(target) {
+        //modify_comment()함수를 불러오는 버튼을 타겟으로 부모 div의 href값 호출
+        const comment_no = $(target).parent().attr('href');
+
+        //textarea-comment-modify + comment.comment_no의 입력값 호출
+        let com_num = $('#textarea-comment-modify' + comment_no).val()
+
+        let modification = com_num
+        const modcomment = confirm('댓글을 정말 수정 할까요?')
+
+        if (modcomment == true) {
+            $.ajax({
+                type: "PUT",
+                url: `/detail/comment-modify`,
+                data: {
+                    comment_no_give: comment_no,
+                    modcomment_give: modification,
+                    plan_no_give: {{ plan_no }}
+                },
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                }
+            })
+        }
+    }
+
+
 
 
 </script>
@@ -332,21 +363,64 @@
                     <div class="my_cards" id="comment-list">
                         <div class="col">
                             <div class="card" id="{{ comment.comment_no }}">
+
                                 <div class="card-body"><h5 class="card-title"> {{ comment.nickname }}님의
                                     댓글입니다.</h5>
                                     <p class="card-text"> {{ comment.comment }} </p>
                                     <p id="comment_time"> {{ comment.registraion_time }} </p>
                                     <p id="plan_no" style="display:none"> {{ comment.plan_no }} </p>
                                 </div>
-                                <div> {# 로그인 유저 id와 댓글 작성 유저 id가 동일할 시 수정, 삭제 버튼 표시 #}
-                                    {% if comment.nickname == user_info.nickname %}
-                                        <button onclick="modify_comment()" type="button"
-                                                class="button del">수정
-                                        </button>
-                                        <button onclick="delete_comment(this)" type="button"
-                                                class="button del">삭제
-                                        </button>
-                                    {% endif %}
+                                {# 로그인 유저 id와 댓글 작성 유저 id가 동일할 시 수정, 삭제 버튼 표시 #}
+                                {% if comment.nickname == user_info.nickname %}
+                                    <!-- 댓글 수정 modal -->
+                                    <div class="modal" id="modal-comment-modify{{ comment.comment_no }}">
+                                        <div class="modal-background"
+                                             onclick='$("#modal-comment-modify{{ comment.comment_no }}").removeClass("is-active")'></div>
+                                        <div class="modal-content">
+                                            <div class="box">
+                                                <article class="media">
+                                                    <div class="media-content">
+                                                        <div class="field">
+                                                                            <textarea
+                                                                                    id="textarea-comment-modify{{ comment.comment_no }}"
+                                                                                    class="textarea">{{ comment.comment }}</textarea>
+                                                        </div>
+                                                        <nav class="level is-mobile">
+                                                            <div class="level-left">
+                                                            </div>
+                                                            <div class="level-right">
+
+                                                                <div class="level-item" href="{{ comment.comment_no }}">
+                                                                    <button onclick="modify_comment(this)"
+                                                                            class="button posting"
+                                                                            href="{{ comment.comment_no }}">댓글 수정
+                                                                    </button>
+                                                                </div>
+                                                                <div class="level-item">
+                                                                    <button onclick='$("#modal-comment-modify{{ comment.comment_no }}").removeClass("is-active")'
+                                                                            class="button">취소
+                                                                    </button>
+                                                                </div>
+
+                                                            </div>
+                                                        </nav>
+                                                    </div>
+                                                </article>
+                                            </div>
+                                        </div>
+                                        <button class="modal-close is-large" aria-label="close"
+                                                onclick='$("#modal-comment-modify{{ comment.comment_no }}").removeClass("is-active")'></button>
+                                    </div>
+
+                                    <div>
+
+                                    <button onclick='$("#modal-comment-modify{{ comment.comment_no }}").addClass("is-active")'
+                                            class="button del" href="{{ comment.comment_no }}">수정
+                                    </button>
+                                    <button onclick="delete_comment(this)" type="button"
+                                            class="button del">삭제
+                                    </button>
+                                {% endif %}
                                 </div>
                             </div>
                         </div>
