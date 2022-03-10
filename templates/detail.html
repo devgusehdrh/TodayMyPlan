@@ -287,11 +287,11 @@
                         <article class="message is-info">
                             <div class="message-header">
                                 <i class="fa-solid fa-comment-dots"></i>
-                                <p class="is-centered" style="font-size:22px">{{ user_plan.nickname }} 님의 오늘 계획입니다.</p>
+                                <p class="is-centered" style="font-size:22px"><div style="cursor: pointer; text-decoration: underline" onclick="goUserInfo()">{{ user_plan.nickname }}</div> 님의 오늘 계획입니다.</p>
                                 {% if user_plan['username'] == user_info['username'] %}
                                     <button onclick='$("#modal-modify").addClass("is-active")' class="button is-rounded is-small">수정</button>
                                     <button class="delete" aria-label="delete" onclick="mypost_delete()"></button>
-                                {% endif %}
+                                {% endif %}g
                             </div>
                             <div class="message-body ">
                                 {{ user_plan.my_plan }}
