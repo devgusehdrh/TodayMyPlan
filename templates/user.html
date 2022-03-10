@@ -47,11 +47,11 @@
                 </div>
             </div>
             {% if status %}
-            <div class="group-btn">
-                <button class="primary-btn" id="editBtn" onclick="showEditModal()">프로필 수정</button>
-                <button class="primary-btn" id="change-pw" onclick="showPwModal()">비밀번호 변경</button>
+                <div class="group-btn">
+                    <button class="primary-btn" id="editBtn" onclick="showEditModal()">프로필 수정</button>
+                    <button class="primary-btn" id="change-pw" onclick="showPwModal()">비밀번호 변경</button>
 
-            </div>
+                </div>
             {% endif %}
             <hr/>
 
@@ -61,29 +61,29 @@
         <!--        포스트 영역-->
         {# my plan이 없는지 확인#}
         {% if my_plan.nickname | length != 0 %}
-        <div class="mycards">
-            <div class="row row-cols-1 row-cols-md-3 g-3">
+            <div class="mycards">
+                <div class="row row-cols-1 row-cols-md-3 g-3">
 
-                <div class="col">
-                    <article class="message is-warning">
-                        <div class="message-header">
-                            <i class="fa-solid fa-comment-dots"></i>
-                            <p>{{ my_plan.nickname }} 님의 오늘 계획</p>
-                            {% if status %}
-                            <button onclick='$("#modal-modify").addClass("is-active")'
-                                    class="button is-rounded is-small">수정
-                            </button>
-                            <button class="delete" aria-label="delete" onclick="mypost_delete()"></button>
-                            {% endif %}
-                        </div>
-                        <div class="message-body" onclick="location.href='/detail/{{ my_plan.plan_no }}'">
-                            {{ my_plan.my_plan }}
-                        </div>
-                    </article>
+                    <div class="col">
+                        <article class="message is-warning">
+                            <div class="message-header">
+                                <i class="fa-solid fa-comment-dots"></i>
+                                <p>{{ my_plan.nickname }} 님의 오늘 계획</p>
+                                {% if status %}
+                                    <button onclick='$("#modal-modify").addClass("is-active")'
+                                            class="button is-rounded is-small">수정
+                                    </button>
+                                    <button class="delete" aria-label="delete" onclick="mypost_delete()"></button>
+                                {% endif %}
+                            </div>
+                            <div class="message-body" onclick="location.href='/detail/{{ my_plan.plan_no }}'">
+                                {{ my_plan.my_plan }}
+                            </div>
+                        </article>
+                    </div>
+
                 </div>
-
             </div>
-        </div>
         {% endif %}
     </main>
     <!--       모달 영역 -->
@@ -97,11 +97,11 @@
                 <div class="close-area" onclick="closeEditModal()">X</div>
                 <div class="content">
                     <label class="label">닉네임</label>
-                    <input id="edit-nickName" class="input" type="text" value="{{ user_info.nickname }}" placeholder={{
-                           user_info.nickname }}>
+                    <input id="edit-nickName" class="input" type="text" value="{{ user_info.nickname }}"
+                           placeholder={{ user_info.nickname }}>
                     <label class="label">인사말</label>
-                    <textarea id="edit-greeting" class="textarea" value="{{ user_info.profile_greeting }}"
-                              placeholder={{ user_info.profile_greeting }}></textarea>
+                    <textarea id="edit-greeting" class="textarea"
+                              placeholder={{ user_info.profile_greeting }}>{{ user_info.profile_greeting }}</textarea>
 
                     <div class="file has-name is-left">
                         <label class="file-label">
@@ -189,9 +189,6 @@
                 onclick='$("#modal-modify").removeClass("is-active")'></button>
     </div>
 </div>
-<script id="template-list-item" type="text/template">
-    {{ user_info.username }}
-</script>
 <script src="../static/js/user.js"></script>
 </body>
 
