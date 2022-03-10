@@ -206,8 +206,7 @@
     }
 
     //22.03.09 홍현승 회원정보 수정 페이지 이동
-    function goUserInfo() {
-        const id = "{{ user_info.username }}"
+    function goUserInfo(id) {
         location.href = `/userinfo/${id}`
     }
 
@@ -280,7 +279,8 @@
             </div>
         </div>
         <div class="col-1" style="margin:auto">
-            <button class="button is-success is-outlined edit" onclick="goUserInfo()">회원정보</button>
+            <button class="button is-success is-outlined edit" onclick="goUserInfo( '{{ user_info.username }}')">회원정보
+            </button>
         </div>
         <div class="col-1" style="margin:auto">
             <button class="button is-light logout" onclick="logout()">로그아웃</button>
@@ -306,7 +306,7 @@
                 <i class="fa-solid fa-comment-dots"></i>
                 <p class="is-centered" style="font-size:22px">
                 <div style="cursor: pointer; text-decoration: underline"
-                     onclick="goUserInfo()">{{ user_plan.nickname }}</div>
+                     onclick="goUserInfo('{{ user_plan.username }}')">{{ user_plan.nickname }}</div>
                 님의 오늘 계획입니다.</p>
                 {% if user_plan['username'] == user_info['username'] %}
                     <button onclick='$("#modal-modify").addClass("is-active")' class="button is-rounded is-small">수정
