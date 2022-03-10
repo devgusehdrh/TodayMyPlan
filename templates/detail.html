@@ -85,6 +85,21 @@
             border-color: #80511a;
             color: #ffffff;
         }
+        .profile_view {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 70%;
+            float: right;
+            overflow: hidden;
+        }
+        .nickname-greeting {
+            font-size:15px;
+        }
     </style>
     <script>
         function logout() {
@@ -190,22 +205,22 @@
             }
 
             //댓글 삭제
-            function delete_comment() {
-                const uncomment = confirm('댓글을 정말 삭제 할까요?')
-
-                if (uncomment == true) {
-                    $.ajax({
-                        type: "DELETE",
-                        url: `/detail/comment-delete`,
-                        data: {},
-                        success: function (response) {
-                            alert(response["msg"])
-                            window.location.reload()
-
-                        }
-                    })
-                }
+        function delete_comment(target) {
+            const comment_no = $(target).parent().parent().attr("id");
+            const uncomment = confirm('댓글을 정말 삭제 할까요?')
+            if (uncomment == true) {
+                $.ajax({
+                    type: "POST",
+                    url: `/detail/comment-delete`,
+                    data: { comment_no_give: comment_no, plan_no_give: {{plan_no}} },
+                    success: function (response) {
+                        alert(response["msg"])
+                        window.location.reload()
+                    }
+                })
             }
+        }
+
 
 
 
@@ -220,7 +235,7 @@
                         </div>
                     </section>
                 </div>
-                <div class="col-5" style="margin:auto;">
+                <div class="col-4" style="margin:auto;">
                     <div class="field has-addons">
                         <div class="control" style="width:100%">
                             <form id="form_box1">
@@ -230,8 +245,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-1" style="margin:auto">
+                    <div class="profile-box">
+                        <img class="profile_view" src="/static/img/profile/{{ user_info['profile_pic_real'] }}">
+                    </div>
+                </div>
                 <div class="col-2" style="margin:auto">
-                    {{ user_info['nickname'] }}님, 오늘도 화이팅!
+                    <div class="nickname-greeting">
+                        <strong>{{ user_info['nickname'] }}</strong> 님<br>오늘도 화이팅!
+                    </div>
                 </div>
                 <div class="col-1" style="margin:auto">
                     <button class="button is-success is-outlined edit" onclick="goUserInfo()">회원정보</button>
@@ -279,22 +301,22 @@
                         <div>
                             {% for comment in comments %}
                                 {% if comment.plan_no == plan_no %}
-                                    <div class="mycards" id="comment-list">
+                                    <div class="my_cards" id="comment-list">
                                         <div class="col">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5 class="card-title"> {{ comment.nickname }}님의 댓글입니다.</h5>
+                                            <div class="card" id="{{ comment.comment_no }}">
+                                                <div class="card-body"><h5 class="card-title"> {{ comment.nickname }}님의
+                                                    댓글입니다.</h5>
                                                     <p class="card-text"> {{ comment.comment }} </p>
                                                     <p id="comment_time"> {{ comment.registraion_time }} </p>
                                                     <p id="plan_no" style="display:none"> {{ comment.plan_no }} </p>
-                                                    <p id="comment_no" style="display:none"> {{ comment.comment_no }} </p>
                                                 </div>
-                                                <div>
-                                                    {# 로그인 유저 id와 댓글 작성 유저 id가 동일할 시 수정, 삭제 버튼 표시 #}
+                                                <div> {# 로그인 유저 id와 댓글 작성 유저 id가 동일할 시 수정, 삭제 버튼 표시 #}
                                                     {% if comment.nickname == user_info.nickname %}
-                                                        <button onclick="modify_comment()" type="button" class="button del">수정
+                                                        <button onclick="modify_comment()" type="button"
+                                                                class="button del">수정
                                                         </button>
-                                                        <button onclick="delete_comment()" type="button" class="button del">삭제
+                                                        <button onclick="delete_comment(this)" type="button"
+                                                                class="button del">삭제
                                                         </button>
                                                     {% endif %}
                                                 </div>
